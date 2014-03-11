@@ -13,7 +13,9 @@ import org.vertx.java.platform.Verticle;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.regex.Pattern;
 
 /**
  * Created by Andy Moncsek on 25.02.14.
@@ -41,6 +43,8 @@ public class ProductVerticle extends Verticle {
         registerEventBusMessageHandlerAdd();
         registerWebsocketHandler(httpServer);
         httpServer.listen(PORT_NUMER);
+
+        container.deployVerticle("org.jacpfx.petstore.server.webserver.WebServerVerticle",10);
         System.out.println("started");
     }
 
@@ -116,18 +120,21 @@ public class ProductVerticle extends Verticle {
     private void registerWebsocketHandler(final HttpServer httpServer) {
         httpServer.websocketHandler((serverSocket) -> {
             String path = serverSocket.path();
-            switch (path){
+            switch (path) {
                 case "/all":
                     repository.addWebSocket(serverSocket);
-                    serverSocket.dataHandler(data->{
-                       serverSocket.writeTextFrame(parser.toJson(all));
+                    // reply to first contact
+                    serverSocket.writeTextFrame(parser.toJson(all));
+                    // add handler for further calls
+                    serverSocket.dataHandler(data -> {
+                        serverSocket.writeTextFrame(parser.toJson(all));
                     });
                     break;
                 case "/update":
-                    serverSocket.dataHandler(data -> vertx.eventBus().send("org.jacpfx.petstore.addAll", data.getBytes()));
+                    serverSocket.dataHandler(data -> vertx.eventBus().send("org.jacpfx.petstore.add", data.getBytes()));
                     break;
                 case "/updateAll":
-                    serverSocket.dataHandler(data -> vertx.eventBus().send("org.jacpfx.petstore.add", data.getBytes()));
+                    serverSocket.dataHandler(data -> vertx.eventBus().send("org.jacpfx.petstore.addAll", data.getBytes()));
                     break;
             }
             serverSocket.closeHandler((close) -> handleConnectionClose(close, serverSocket));
