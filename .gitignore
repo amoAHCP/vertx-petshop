@@ -7,3 +7,9 @@
 *idea
 *.idea
 *.iml
+petstore.iml
+petstore-client.iml
+petstore-model.iml
+petstore-server.iml
+
+
