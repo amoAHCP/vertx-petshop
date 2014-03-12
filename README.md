@@ -1,4 +1,4 @@
-vertx-patstore
+vertx-petstore
 =============
 
 This is a sample petstore with AngularJS Frontend, vertx backend and a JacpFX BO-Client.
