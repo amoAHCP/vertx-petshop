@@ -19,11 +19,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 /**
- * Created with IntelliJ IDEA.
- * User: PETE
- * Date: 11/03/14
- * Time: 16:59
- * To change this template use File | Settings | File Templates.
+ *
+ * @author Patrick Symmangk (pete.jacp@gmail.com)
+ *
  */
 
 @View(id = BaseConfig.CUSTOMER_COMPONENT_ID, name = "SimpleView", active = true, resourceBundleLocation = "bundles.languageBundle", initialTargetLayoutId = BaseConfig.TARGET_CUSTOMER_COMPONENT_ID)
@@ -79,7 +77,7 @@ public class CustomerComponent implements FXComponent {
      * @param arg0
      */
     public void onTearDownComponent(final FXComponentLayout arg0) {
-        LOGGER.info("run on tear down of ComponentLeft ");
+        LOGGER.info("run on tear down of CustomerComponent ");
 
     }
 
@@ -90,7 +88,7 @@ public class CustomerComponent implements FXComponent {
      */
     private Node createUI() {
         this.mainPane = new BorderPane();
-        Button b = new Button("RIGHT");
+        Button b = new Button("CUSTOMERS");
         this.mainPane.setCenter(b);
 
         return this.mainPane;

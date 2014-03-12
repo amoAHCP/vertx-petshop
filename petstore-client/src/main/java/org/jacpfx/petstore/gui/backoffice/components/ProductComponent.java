@@ -6,7 +6,6 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -21,7 +20,6 @@ import org.jacpfx.rcp.componentLayout.FXComponentLayout;
 import org.jacpfx.rcp.context.Context;
 import org.jacpfx.rcp.util.CSSUtil;
 import org.jacpfx.rcp.util.FXUtil;
-import org.jacpfx.rcp.util.LayoutUtil;
 
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -42,7 +40,7 @@ public class ProductComponent implements FXComponent {
     @Resource
     private Context context;
 
-    private TilePane mainPane;
+    private BorderPane mainPane;
 
     @Override
     /**
@@ -64,7 +62,7 @@ public class ProductComponent implements FXComponent {
                            final Message<Event, Object> message) {
         // runs in FX application thread
         if (message.messageBodyEquals(FXUtil.MessageUtil.INIT)) {
-            this.mainPane = (TilePane) arg0;
+            this.mainPane = (BorderPane) arg0;
         }
         return this.mainPane;
     }
@@ -97,21 +95,20 @@ public class ProductComponent implements FXComponent {
      * @return
      */
     private Node createUI() {
-        this.mainPane = new TilePane(Orientation.VERTICAL);
-        this.mainPane.setTileAlignment(Pos.CENTER);
-        this.mainPane.setVgap(20);
-        this.mainPane.setHgap(20);
-        this.mainPane.setPrefRows(10);
-        this.mainPane.setPadding(new Insets(30));
-        this.mainPane.setTranslateY(30);
+        this.mainPane =  new BorderPane();
 
+        TilePane tile = new TilePane(Orientation.HORIZONTAL);
+        tile.setTileAlignment(Pos.CENTER);
+        tile.setVgap(20);
+        tile.setHgap(20);
+        tile.setPadding(new Insets(50));
 
-        int i = 6;
+        int i = 42;
         while (--i >= 0) {
-            this.mainPane.getChildren().add(this.createRectangle());
+            tile.getChildren().add(this.createRectangle());
         }
 
-
+        this.mainPane.setCenter(tile);
         return this.mainPane;
     }
 
