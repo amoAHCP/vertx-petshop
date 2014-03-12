@@ -24,10 +24,10 @@ import static org.junit.Assert.assertNotNull;
 public class ProductVerticleTest {
 
     private ExecutorService executor = Executors.newCachedThreadPool();
-
+    PlatformManager pm;
     @Before
-    public void onStart() throws MalformedURLException {
-
+    public void onStart() throws MalformedURLException, InterruptedException {
+        pm = connect(100);
     }
 
     private PlatformManager connect(int instances) throws MalformedURLException, InterruptedException {
@@ -60,7 +60,7 @@ public class ProductVerticleTest {
 
     @Test
     public void getAllProductsInitialConnect() throws InterruptedException, IOException {
-        PlatformManager pm = connect(1);
+        CountDownLatch stopLatch = new CountDownLatch(1);
         CountDownLatch latch = new CountDownLatch(1);
         CountDownLatch latch2 = new CountDownLatch(1);
         final WebSocket[] wsTemp = new WebSocket[1];
@@ -82,13 +82,11 @@ public class ProductVerticleTest {
         //  wsTemp[0].writeTextFrame("");
         latch2.await();
 
-        pm.stop();
 
     }
 
     @Test
     public void getAllProducts() throws InterruptedException, IOException {
-        PlatformManager pm = connect(1);
 
 
         CountDownLatch latch = new CountDownLatch(1);
@@ -114,12 +112,10 @@ public class ProductVerticleTest {
         // second connect
         wsTemp[0].writeTextFrame("");
         latch2.await();
-        pm.stop();
     }
 
     @Test
     public void testMultithreadedProductGet() throws MalformedURLException, InterruptedException {
-        PlatformManager pm = connect(100);
         int amount =100;
         CountDownLatch outer = new CountDownLatch(100);
         CountDownLatch inner = new CountDownLatch(100);
@@ -149,7 +145,6 @@ public class ProductVerticleTest {
         }
         outer.await();
         inner.await();
-        pm.stop();
     }
 
     public void testGetAllAddSingleAndGetAll() throws MalformedURLException, InterruptedException {
