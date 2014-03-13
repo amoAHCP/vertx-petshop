@@ -16,9 +16,6 @@ public class Customer implements Serializable {
     // ======================================
 
     private Long id;
-    private String login;
-    @Size(min = 1, max = 10)
-    private String password;
     @Size(min = 2, max = 50)
     private String firstname;
     @Size(min = 2, max = 50)
@@ -27,7 +24,6 @@ public class Customer implements Serializable {
     private String email;
     @Valid
     private Address homeAddress = new Address();
-    private Date dateOfBirth;
 
     private Integer age;
 
@@ -39,14 +35,11 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
-    public Customer(String firstname, String lastname, String login, String password, String email, Address address) {
+    public Customer(String firstname, String lastname, String email, Address address) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.login = login;
-        this.password = password;
         this.email = email;
         this.homeAddress = address;
-        this.dateOfBirth = new Date();
     }
 
 
@@ -56,22 +49,6 @@ public class Customer implements Serializable {
 
     public Long getId() {
         return id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstname() {
@@ -115,21 +92,9 @@ public class Customer implements Serializable {
         this.homeAddress = homeAddress;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
     public Integer getAge() {
         return age;
     }
-
-    // ======================================
-    // =   Methods hash, equals, toString   =
-    // ======================================
 
     @Override
     public boolean equals(Object o) {
@@ -138,14 +103,28 @@ public class Customer implements Serializable {
 
         Customer customer = (Customer) o;
 
-        if (!login.equals(customer.login)) return false;
+        if (age != null ? !age.equals(customer.age) : customer.age != null) return false;
+        if (email != null ? !email.equals(customer.email) : customer.email != null) return false;
+        if (firstname != null ? !firstname.equals(customer.firstname) : customer.firstname != null) return false;
+        if (homeAddress != null ? !homeAddress.equals(customer.homeAddress) : customer.homeAddress != null)
+            return false;
+        if (id != null ? !id.equals(customer.id) : customer.id != null) return false;
+        if (lastname != null ? !lastname.equals(customer.lastname) : customer.lastname != null) return false;
+        if (telephone != null ? !telephone.equals(customer.telephone) : customer.telephone != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return login.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
+        result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
+        result = 31 * result + (telephone != null ? telephone.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (homeAddress != null ? homeAddress.hashCode() : 0);
+        result = 31 * result + (age != null ? age.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -153,14 +132,11 @@ public class Customer implements Serializable {
         final StringBuilder sb = new StringBuilder();
         sb.append("Customer");
         sb.append("{id=").append(id);
-        sb.append(", login='").append(login).append('\'');
-        sb.append(", password='").append(password).append('\'');
         sb.append(", firstname='").append(firstname).append('\'');
         sb.append(", lastname='").append(lastname).append('\'');
         sb.append(", telephone='").append(telephone).append('\'');
         sb.append(", email='").append(email).append('\'');
         sb.append(", homeAddress=").append(homeAddress);
-        sb.append(", dateOfBirth=").append(dateOfBirth);
         sb.append(", age=").append(age);
         sb.append('}');
         return sb.toString();

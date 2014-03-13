@@ -41,7 +41,6 @@ public class WebServerVerticle extends Verticle {
         //req.response().setStatusCode(404);
         //req.response().end();
 
-        System.out.println("Webserver started: watch out!! your working directory must be set to petstore-server  "+System.getProperties().getProperty("user.dir"));
     }
 
     private HttpServer startServer() {
