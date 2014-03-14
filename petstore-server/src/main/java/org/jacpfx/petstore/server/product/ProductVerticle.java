@@ -13,7 +13,9 @@ import org.vertx.java.platform.Verticle;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.regex.Pattern;
 
 /**
  * Created by Andy Moncsek on 25.02.14.
@@ -37,6 +39,7 @@ public class ProductVerticle extends Verticle {
     @Override
     public void start() {
         final HttpServer httpServer = startServer();
+        registerEventBusWSSession();
         registerEventBusMessageHandlerAddAll();
         registerEventBusMessageHandlerAdd();
         registerWebsocketHandler(httpServer);
@@ -54,20 +57,16 @@ public class ProductVerticle extends Verticle {
         vertx.eventBus().registerHandler("org.jacpfx.petstore.addAll", this::handleWSAddAllMessagesFromBus);
     }
 
-    private void registerEventBusMessageHandlerAdd() {
-        vertx.eventBus().registerHandler("org.jacpfx.petstore.add", this::handleWSAddMessagesFromBus);
-    }
-
     /**
      * Handle redirected messages from WebSocket.
      *
      * @param message
      */
     private void handleWSAddAllMessagesFromBus(final Message<byte[]> message) {
-            final String productListJSON = getProductListJSON(message);
-            repository.getWebSockets()
-                    .parallelStream()
-                    .forEach(ws -> ws.writeTextFrame(productListJSON));
+        final String productListJSON = getProductListJSON(message);
+        repository.getWebSockets()
+                .parallelStream()
+                .forEach(ws -> ws.writeTextFrame(productListJSON));
     }
 
 
@@ -81,6 +80,10 @@ public class ProductVerticle extends Verticle {
         }
 
         return parser.toJson(all);
+    }
+
+    private void registerEventBusMessageHandlerAdd() {
+        vertx.eventBus().registerHandler("org.jacpfx.petstore.add", this::handleWSAddMessagesFromBus);
     }
 
     /**
@@ -106,6 +109,18 @@ public class ProductVerticle extends Verticle {
     }
 
 
+
+    private void registerEventBusWSSession() {
+        vertx.eventBus().registerHandler("org.jacpfx.petstore.session", this::handleWSSessionMessage);
+    }
+
+    private void handleWSSessionMessage(final Message<ServerWebSocket> socket) {
+        repository.addWebSocket(socket.body());
+    }
+
+
+
+
     /**
      * Registers onMessage and onClose message handler for WebSockets
      *
@@ -125,10 +140,10 @@ public class ProductVerticle extends Verticle {
                     });
                     break;
                 case "/update":
-                    serverSocket.dataHandler(data -> vertx.eventBus().send("org.jacpfx.petstore.add", data.getBytes()));
+                    serverSocket.dataHandler(data -> vertx.eventBus().publish("org.jacpfx.petstore.add", data.getBytes()));
                     break;
                 case "/updateAll":
-                    serverSocket.dataHandler(data -> vertx.eventBus().send("org.jacpfx.petstore.addAll", data.getBytes()));
+                    serverSocket.dataHandler(data -> vertx.eventBus().publish("org.jacpfx.petstore.addAll", data.getBytes()));
                     break;
             }
             serverSocket.closeHandler((close) -> handleConnectionClose(close, serverSocket));
