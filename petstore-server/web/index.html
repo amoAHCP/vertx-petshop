@@ -1,12 +1,133 @@
-<html ng-app>
+<html ng-app="Petstore">
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
-    <script src="/js/application.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/bootstrap.css" media="screen">
+    <link rel="stylesheet" href="../css/bootswatch.min.css">
 </head>
-<body ng-controller="MainController">
-<label>Bitte gib Deinen Namen ein:</label>
-<input type="text" ng-model="name">
-<hr>
-<strong>Hallo {{name}}!</strong>
+<body ng-controller="ItemListController">
+
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="../" class="navbar-brand">JacpFX Petstore</a>
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Products <span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="themes">
+                        <li><a href="../default/">Dogs</a></li>
+                        <li class="divider"></li>
+                        <li><a href="../amelia/">Food</a></li>
+                        <li><a href="../amelia/">Harnest</a></li>
+                        <li><a href="../amelia/">Toys</a></li>
+                        <li>&nbsp;</li>
+                        <li><a href="../default/">Cats</a></li>
+                        <li class="divider"></li>
+                        <li><a href="../default/">Food</a></li>
+                        <li><a href="../default/">Toys</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="../help/">Help</a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Built With:</a></li>
+                <li><a href="https://github.com/JacpFX/JacpFX" target="_blank">JacpFX</a></li>
+                <li><a href="angularjs.org" target="_blank">angularJS</a></li>
+                <li><a href="bootswatch.com" target="_blank">bootswatch</a></li>
+                <li><a href="vertx.io" target="_blank">vert.x</a></li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="page-header" id="banner">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Petstore</h1>
+
+                <p class="lead">Light and shadow</p>
+            </div>
+            <div class="col-lg-12">
+                <div>
+                    <label>Bitte gib Deinen Namen ein:</label>
+                    <input type="text" ng-model="name">
+                    <hr>
+                    <strong>Hallo {{name}}!</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="page-header" id="banner">
+        <div class="row">
+            <div class="col-lg-12">
+                <div ng-controller='ItemListController'>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Qty</th>
+                            <th></th>
+                        </tr>
+                        <tr ng-repeat="item in items">
+                            <td><input type="text" ng-model="item.name"></td>
+                            <td><input type="text" ng-model="item.price"></td>
+                            <td>
+                                <button type="button" ng-click="updateItem(item)">Update</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+
+                <ul class="list-unstyled">
+                    <li class="pull-right"><a href="#top">Back to top</a></li>
+                    <li><a href="http://feeds.feedburner.com/bootswatch">JacpFX</a></li>
+                    <li><a href="https://twitter.com/thomashpark">bootstrap</a></li>
+                    <li><a href="https://github.com/thomaspark/bootswatch/">bootswatch</a></li>
+                    <li><a href="https://github.com/thomaspark/bootswatch/">angularJS</a></li>
+                    <li><a href="https://github.com/thomaspark/bootswatch/">vert.x</a></li>
+                </ul>
+                <p>Made by <a href="mailto:amo.ahcp@gmail.com">Andy Moncsek</a> and
+                    <a href="mailto:pete.ahcp@gmail.com">Patrick Symmangk</a>. </p>
+
+                <p>Current version made for Trivadis Techevent (03/2014).</p>
+
+
+            </div>
+        </div>
+
+    </footer>
+
+
+</div>
+
+
+<script src="../js/jquery-1.10.2.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/bootswatch.js"></script>
+<script src="../js/angular.min.js"></script>
+<script src="../js/angular-route.js"></script>
+<script src="../js/pusher.js"></script>
+<script src="../js/application.js"></script>
+<script src="../js/sockjs.js"></script>
 </body>
 </html>
