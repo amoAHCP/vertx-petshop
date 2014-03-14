@@ -13,9 +13,7 @@ import org.vertx.java.platform.Verticle;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.regex.Pattern;
 
 /**
  * Created by Andy Moncsek on 25.02.14.
@@ -23,7 +21,7 @@ import java.util.regex.Pattern;
 public class ProductVerticle extends Verticle {
     private WebSocketRepository repository = new WebSocketRepository();
 
-    public static Integer PORT_NUMER = 8080;
+    public static Integer PORT_NUMBER = 8080;
 
     private List<Product> all = new CopyOnWriteArrayList<>(
             Arrays.asList(new Product(1L,"Katze","http://imag1.jpg",200d),
@@ -42,7 +40,7 @@ public class ProductVerticle extends Verticle {
         registerEventBusMessageHandlerAddAll();
         registerEventBusMessageHandlerAdd();
         registerWebsocketHandler(httpServer);
-        httpServer.listen(PORT_NUMER);
+        httpServer.listen(PORT_NUMBER);
 
         container.deployVerticle("org.jacpfx.petstore.server.webserver.WebServerVerticle",10);
         System.out.println("started");
@@ -78,9 +76,7 @@ public class ProductVerticle extends Verticle {
         try {
             final ProductListDTO dto = MessageUtil.getMessage(message.body(), ProductListDTO.class);
             all = new CopyOnWriteArrayList<>(dto.getProducts());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -103,9 +99,7 @@ public class ProductVerticle extends Verticle {
         try {
         final Product product = MessageUtil.getMessage(message.body(), Product.class);
         all.add(product);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return parser.toJson(all);
