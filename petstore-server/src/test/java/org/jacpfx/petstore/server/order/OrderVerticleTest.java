@@ -125,5 +125,31 @@ public class OrderVerticleTest {
         assertTrue(allOrders.size()==1);
     }
 
+    @Test
+    public void orderTest() throws InterruptedException {
+        CountDownLatch outer = new CountDownLatch(1);
+        CountDownLatch inner = new CountDownLatch(1);
+        final WebSocket[] wsUpdateTemp = new WebSocket[1];
+        HttpClient updateClient = getClient((ws) -> {
+            // Connected!^                                         ^
+            outer.countDown();
+            wsUpdateTemp[0] = ws;
+            ws.dataHandler((data) -> {
+                assertNotNull(data);
+
+                System.out.println("client Order:" + data);
+
+                inner.countDown();
+            });
+
+        }, "/placeOrder");
+        outer.await();
+         Order order = new Order(1,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D)));
+
+        String orderJson = parser.toJson(order);
+        wsUpdateTemp[0].writeTextFrame(orderJson);
+        inner.await();
+    }
+
 
 }

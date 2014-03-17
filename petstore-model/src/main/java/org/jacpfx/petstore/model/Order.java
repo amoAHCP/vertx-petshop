@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * Created by amo on 12.03.14.
  */
+// TODO add id and update hashCode
 public class Order implements Serializable {
     private List<Product> products;
     private Customer customer;

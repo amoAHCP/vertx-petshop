@@ -122,7 +122,7 @@ public class ProductVerticle extends Verticle {
      */
     private void registerWebsocketHandler(final HttpServer httpServer) {
         httpServer.websocketHandler((serverSocket) -> {
-            String path = serverSocket.path();
+            final String path = serverSocket.path();
             switch (path) {
                 case "/all":
                     repository.addWebSocket(serverSocket);
