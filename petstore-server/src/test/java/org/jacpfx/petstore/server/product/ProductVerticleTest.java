@@ -48,14 +48,7 @@ public class ProductVerticleTest {
         connect(10);
     }
 
-    //@After
-    public void onEnd() throws InterruptedException {
-        final CountDownLatch waitForDeploy = new CountDownLatch(1);
-       pm.undeploy("org.jacpfx.petstore.server.product.ProductVerticle",(event)->{
-           waitForDeploy.countDown();
-       });
-        waitForDeploy.await(1000, TimeUnit.MILLISECONDS);
-    }
+
 
     private static PlatformManager connect(int instances) throws MalformedURLException, InterruptedException {
 
