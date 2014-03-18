@@ -1,46 +1,30 @@
-angular.module('Petstore', ['doowb.angular-pusher']).
+angular.module('Petstore', [])
 
-    config(['PusherServiceProvider',
-        function (PusherServiceProvider) {
-            PusherServiceProvider
-                .setToken('60b1ae822a161deb3f0c')
-                .setOptions({});
-        }
-    ]);
-
-function MainController($scope) {
+var ItemListController = function ($scope) {
     $scope.name = 'AngularJS';
-}
+    $scope.pets = [];
+    $scope.test = 'asdas';
 
-var ItemListController = function($scope, $http, Pusher) {
-    $scope.items = [];
+    var itemWS = new WebSocket("ws://localhost:8080/all");
+    var orderWS = new WebSocket("ws://localhost:8080/update");
 
-    Pusher.subscribe('items', 'updated', function (item) {
-        // an item was updated. find it in our list and update it.
-        for (var i = 0; i < $scope.items.length; i++) {
-            if ($scope.items[i].id === item.id) {
-                $scope.items[i] = item;
-                break;
-            }
-        }
-    });
+    itemWS.onopen = function () {
+        console.log("item WS open");
+    }
 
-    var retrieveItems = function () {
-        // get a list of items from the api located at '/api/items'
-        console.log('getting items');
-        $http.get('/all')
-            .success(function (items) {
-                $scope.items = items;
-            }).error(function (error){
-                console.log('error');
-            });
+    orderWS.onopen = function () {
+        console.log("order WS open");
+    }
+
+    itemWS.onmessage = function (msg) {
+        $scope.$apply(function () {
+            $scope.pets = JSON.parse(msg.data) ;
+        });
+    }
+
+
+    $scope.placeOrder = function (item) {
+        orderWS.send(JSON.stringify(item));
     };
 
-    $scope.updateItem = function (item) {
-        console.log('updating item');
-        $http.post('/update', item);
-    };
-
-    // load the items
-    retrieveItems();
 }

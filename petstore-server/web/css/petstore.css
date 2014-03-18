@@ -1,0 +1,8 @@
+.product {
+    border-radius: 5px;
+    border: 1px solid dimgray;
+    width: 180px;
+    height: 180px;
+    float: left;
+    margin: 20px;
+}
