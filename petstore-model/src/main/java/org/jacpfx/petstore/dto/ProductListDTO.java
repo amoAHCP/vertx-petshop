@@ -22,6 +22,10 @@ public class ProductListDTO implements Serializable {
         return products;
     }
 
+    public State getState() {
+        return state;
+    }
+
     public enum State {
         ALL, UPDATE
 

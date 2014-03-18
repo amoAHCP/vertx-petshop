@@ -58,6 +58,7 @@ public class ProductComponent implements FXComponent {
 
     private ObservableList<Node> products = FXCollections.emptyObservableList();
     private List<ManagedFragmentHandler<OrderBoxFragment>> fragmentList = new CopyOnWriteArrayList<>();
+    private List<ManagedFragmentHandler<OrderBoxFragment>> fragmentSubList = new CopyOnWriteArrayList<>();
 
     @Override
     /**
@@ -72,8 +73,16 @@ public class ProductComponent implements FXComponent {
             ProductListDTO dto = message.getTypedMessageBody(ProductListDTO.class);
 
             final List<ManagedFragmentHandler<OrderBoxFragment>> collect = dto.getProducts().parallelStream().map(p -> createOrderFragment(p)).collect(Collectors.toList());
-            fragmentList.clear();
-            fragmentList.addAll(collect);
+            if(dto.getState().equals(ProductListDTO.State.ALL)) {
+                fragmentList.clear();
+                fragmentList.addAll(collect);
+            } else {
+                fragmentSubList.clear();
+                fragmentSubList.addAll(collect);
+                fragmentList.addAll(collect);
+
+            }
+
         }
         return null;
     }
@@ -88,8 +97,16 @@ public class ProductComponent implements FXComponent {
         if (message.messageBodyEquals(FXUtil.MessageUtil.INIT)) {
             this.mainPane = (BorderPane) arg0;
         } else if(message.isMessageBodyTypeOf(ProductListDTO.class)){
-            final List<Node> collect = fragmentList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
-            tile.getChildren().addAll(collect);
+            ProductListDTO dto = message.getTypedMessageBody(ProductListDTO.class);
+            if(dto.getState().equals(ProductListDTO.State.ALL)) {
+                final List<Node> collect = fragmentList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
+                tile.getChildren().clear();
+                tile.getChildren().addAll(collect);
+            } else {
+                final List<Node> collect1 = fragmentSubList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
+                tile.getChildren().addAll(collect1);
+            }
+
         }
         return this.mainPane;
     }

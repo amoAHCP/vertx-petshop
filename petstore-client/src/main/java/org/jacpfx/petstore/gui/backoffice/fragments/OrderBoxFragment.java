@@ -2,6 +2,7 @@ package org.jacpfx.petstore.gui.backoffice.fragments;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import org.jacpfx.api.annotations.Resource;
@@ -43,5 +44,6 @@ public class OrderBoxFragment {
         amountLabel.setText("1");
         priceLabel.setText(Double.toString(p.getPrice()));
         nameLabel.setText(p.getName());
+        if(p.getImageURL()!=null && p.getImageURL().length()>1)productImage.setImage(new Image("/images/products/"+p.getImageURL()));
     }
 }

@@ -26,13 +26,13 @@ public class ProductVerticle extends Verticle {
     public static Integer PORT_NUMER = 8080;
 
     private List<Product> all = new CopyOnWriteArrayList<>(
-            Arrays.asList(new Product("Katze","box1.jpg",200d),
-                    new Product("Hund","box2.jpg",200d),
-                    new Product("Pferd","box3.jpg",2000d),
-                    new Product("Koala","dog.jpg",1000d),
-                    new Product("Tieger","box1.jpg",5000d),
-                    new Product("Giraffe","box2.jpg",2000d),
-                    new Product("Igel","box3jpg",100d))
+            Arrays.asList(new Product("Katze","box1.png",200d),
+                    new Product("Hund","box2.png",200d),
+                    new Product("Pferd","box3.png",2000d),
+                    new Product("Koala","dog.png",1000d),
+                    new Product("Tieger","box1.png",5000d),
+                    new Product("Giraffe","box2.png",2000d),
+                    new Product("Igel","box3.png",100d))
     );
     private Gson parser = new Gson();
 

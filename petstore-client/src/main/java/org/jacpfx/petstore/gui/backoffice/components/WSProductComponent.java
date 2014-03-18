@@ -71,10 +71,9 @@ public class WSProductComponent implements CallbackComponent {
     }
 
     private void allProductsData(Buffer buffer) {
-        Type collectionType = new TypeToken<List<Product>>(){}.getType();
         Gson parser = new Gson();
         String json =  buffer.getString(0, buffer.length());
-        List<Product> p = parser.fromJson(json, collectionType);
-        context.send(BaseConfig.PRODUCT_COMPONENT_ID, new ProductListDTO(ProductListDTO.State.ALL,p));
+        ProductListDTO p = parser.fromJson(json, ProductListDTO.class);
+        context.send(BaseConfig.PRODUCT_COMPONENT_ID, p);
     }
 }
