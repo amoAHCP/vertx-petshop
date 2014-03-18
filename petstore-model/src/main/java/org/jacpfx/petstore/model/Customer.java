@@ -2,9 +2,7 @@ package org.jacpfx.petstore.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-import java.beans.Transient;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by amo on 16.01.14.

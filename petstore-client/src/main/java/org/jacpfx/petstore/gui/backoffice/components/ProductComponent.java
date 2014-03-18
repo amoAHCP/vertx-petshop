@@ -10,8 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.TilePane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.component.View;
 import org.jacpfx.api.annotations.lifecycle.PostConstruct;
@@ -25,7 +23,6 @@ import org.jacpfx.rcp.component.FXComponent;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
 import org.jacpfx.rcp.components.managedFragment.ManagedFragmentHandler;
 import org.jacpfx.rcp.context.Context;
-import org.jacpfx.rcp.util.CSSUtil;
 import org.jacpfx.rcp.util.FXUtil;
 
 import java.util.List;

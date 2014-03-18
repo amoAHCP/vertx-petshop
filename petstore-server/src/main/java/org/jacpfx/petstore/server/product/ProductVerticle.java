@@ -13,9 +13,7 @@ import org.vertx.java.platform.Verticle;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.regex.Pattern;
 
 /**
  * Created by Andy Moncsek on 25.02.14.

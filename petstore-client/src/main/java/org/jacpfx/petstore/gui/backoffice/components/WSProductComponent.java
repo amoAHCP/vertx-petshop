@@ -1,7 +1,6 @@
 package org.jacpfx.petstore.gui.backoffice.components;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import javafx.event.Event;
 import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.component.Component;
@@ -10,7 +9,6 @@ import org.jacpfx.api.annotations.lifecycle.PreDestroy;
 import org.jacpfx.api.message.Message;
 import org.jacpfx.petstore.dto.ProductListDTO;
 import org.jacpfx.petstore.gui.backoffice.configuration.BaseConfig;
-import org.jacpfx.petstore.model.Product;
 import org.jacpfx.rcp.component.CallbackComponent;
 import org.jacpfx.rcp.context.Context;
 import org.vertx.java.core.Vertx;
@@ -19,8 +17,6 @@ import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpClient;
 import org.vertx.java.core.http.WebSocket;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 

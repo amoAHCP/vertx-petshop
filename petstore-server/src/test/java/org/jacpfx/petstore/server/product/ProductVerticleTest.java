@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.jacpfx.petstore.dto.ProductListDTO;
 import org.jacpfx.petstore.model.Product;
-import org.jacpfx.petstore.util.MessageUtil;
 import org.jacpfx.petstore.util.Serializer;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.vertx.java.core.Handler;
@@ -26,13 +23,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by amo on 25.02.14.
