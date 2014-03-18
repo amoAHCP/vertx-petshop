@@ -17,7 +17,10 @@ public class BaseConfig {
     // ***** COMPONENTS *****
     public static final String CUSTOMER_COMPONENT_ID = "c01";
     public static final String PRODUCT_COMPONENT_ID = "c02";
+    public static final String WSPRODUCT_COMPONENT_ID = "c03";
 
+    // ***** FRAGMENTS *****
+    public static final String ORDER_BOX_FRAGMENT = "d01";
     // ***** TARGETS *****
     public static final String TARGET_CUSTOMER_COMPONENT_ID = "customerComponent";
     public static final String TARGET_PRODUCT_COMPONENT_ID = "productComponent";

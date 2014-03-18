@@ -45,7 +45,7 @@ public class ProductVerticleTest {
     @BeforeClass
     public static void onStart() throws MalformedURLException, InterruptedException {
         // if server was started manually, uncomment this:
-        connect(10);
+        //connect(10);
     }
 
 
@@ -189,8 +189,8 @@ public class ProductVerticleTest {
                 Type collectionType = new TypeToken<List<Product>>(){}.getType();
                 String json =  data.getString(0, data.length());
                 assertNotNull(json);
-                productList.clear();
-                productList.addAll(parser.fromJson(json, collectionType));
+
+                productList.addAll(parser.fromJson(json, ProductListDTO.class).getProducts());
                 inner[0].countDown();
             });
         }, "/all");
@@ -256,8 +256,8 @@ public class ProductVerticleTest {
                 Type collectionType = new TypeToken<List<Product>>(){}.getType();
                 String json =  data.getString(0, data.length());
                 assertNotNull(json);
-                productList.clear();
-                productList.addAll(parser.fromJson(json, collectionType));
+
+                productList.addAll(parser.fromJson(json, ProductListDTO.class).getProducts());
                 inner[0].countDown();
             });
         }, "/all");
@@ -281,18 +281,18 @@ public class ProductVerticleTest {
         }, "/updateAll");
         outerUpdate.await();
         // send product
-        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(Arrays.asList(new Product(100L,"KatzeGrau","",10),new Product(101L,"HundWeiss","",10))))));
+        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(ProductListDTO.State.UPDATE,Arrays.asList(new Product(100L,"KatzeGrau","",10),new Product(101L,"HundWeiss","",10))))));
         inner[0].await();
         assertFalse(productList.isEmpty());
-        assertTrue(2==productList.size());
+        assertTrue(6==productList.size());
 
         inner[0] = new CountDownLatch(1);
         // send product
-        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(Arrays.asList(new Product(103L,"Irgendeintier","",10),new Product(100L,"KatzeGrau","",10),new Product(101L,"HundWeiss","",10))))));
+        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(ProductListDTO.State.UPDATE,Arrays.asList(new Product(103L,"Irgendeintier","",10),new Product(100L,"KatzeGrau","",10),new Product(101L,"HundWeiss","",10))))));
 
         inner[0].await();
         assertFalse(productList.isEmpty());
-        assertTrue(3==productList.size());
+        assertTrue(9==productList.size());
         client.close();
     }
 }

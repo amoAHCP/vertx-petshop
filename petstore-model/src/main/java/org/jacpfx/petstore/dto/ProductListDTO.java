@@ -11,12 +11,19 @@ import java.util.List;
 public class ProductListDTO implements Serializable {
 
     private final List<Product> products;
+    private final State state;
 
-    public ProductListDTO(final List<Product> products) {
+    public ProductListDTO(final State state,final List<Product> products) {
+        this.state = state;
         this.products = products;
     }
 
     public List<Product> getProducts() {
         return products;
+    }
+
+    public enum State {
+        ALL, UPDATE
+
     }
 }

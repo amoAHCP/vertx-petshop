@@ -1,5 +1,7 @@
 package org.jacpfx.petstore.gui.backoffice.components;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -15,15 +17,22 @@ import org.jacpfx.api.annotations.component.View;
 import org.jacpfx.api.annotations.lifecycle.PostConstruct;
 import org.jacpfx.api.annotations.lifecycle.PreDestroy;
 import org.jacpfx.api.message.Message;
+import org.jacpfx.petstore.dto.ProductListDTO;
 import org.jacpfx.petstore.gui.backoffice.configuration.BaseConfig;
+import org.jacpfx.petstore.gui.backoffice.fragments.OrderBoxFragment;
+import org.jacpfx.petstore.model.Product;
 import org.jacpfx.rcp.component.FXComponent;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
+import org.jacpfx.rcp.components.managedFragment.ManagedFragmentHandler;
 import org.jacpfx.rcp.context.Context;
 import org.jacpfx.rcp.util.CSSUtil;
 import org.jacpfx.rcp.util.FXUtil;
 
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,6 +45,8 @@ import java.util.logging.Logger;
 @View(id = BaseConfig.PRODUCT_COMPONENT_ID, name = "SimpleView", active = true, resourceBundleLocation = "bundles.languageBundle", initialTargetLayoutId = BaseConfig.TARGET_PRODUCT_COMPONENT_ID)
 public class ProductComponent implements FXComponent {
 
+
+
     private static final Logger LOGGER = Logger.getLogger(ProductComponent.class.getName());
 
     @Resource
@@ -43,14 +54,26 @@ public class ProductComponent implements FXComponent {
 
     private BorderPane mainPane;
 
+    TilePane tile = new TilePane(Orientation.HORIZONTAL);
+
+    private ObservableList<Node> products = FXCollections.emptyObservableList();
+    private List<ManagedFragmentHandler<OrderBoxFragment>> fragmentList = new CopyOnWriteArrayList<>();
+
     @Override
     /**
      * The handle method always runs outside the main application thread. You can create new nodes, execute long running tasks but you are not allowed to manipulate existing nodes here.
      */
     public Node handle(final Message<Event, Object> message) {
         // runs in worker thread
+
         if (message.messageBodyEquals(FXUtil.MessageUtil.INIT)) {
             return createUI();
+        } else if(message.isMessageBodyTypeOf(ProductListDTO.class)){
+            ProductListDTO dto = message.getTypedMessageBody(ProductListDTO.class);
+
+            final List<ManagedFragmentHandler<OrderBoxFragment>> collect = dto.getProducts().parallelStream().map(p -> createOrderFragment(p)).collect(Collectors.toList());
+            fragmentList.clear();
+            fragmentList.addAll(collect);
         }
         return null;
     }
@@ -64,6 +87,9 @@ public class ProductComponent implements FXComponent {
         // runs in FX application thread
         if (message.messageBodyEquals(FXUtil.MessageUtil.INIT)) {
             this.mainPane = (BorderPane) arg0;
+        } else if(message.isMessageBodyTypeOf(ProductListDTO.class)){
+            final List<Node> collect = fragmentList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
+            tile.getChildren().addAll(collect);
         }
         return this.mainPane;
     }
@@ -97,17 +123,17 @@ public class ProductComponent implements FXComponent {
      */
     private Node createUI() {
         this.mainPane =  new BorderPane();
-        TilePane tile = new TilePane(Orientation.HORIZONTAL);
+
         tile.setTileAlignment(Pos.CENTER);
         tile.setVgap(20);
         tile.setHgap(20);
         tile.setPadding(new Insets(20,0,20,20));
 
 
-        int i = 42;
+       /* int i = 42;
         while (--i >= 0) {
             tile.getChildren().add(this.createRectangle());
-        }
+        }*/
         ScrollPane scrollPane = new ScrollPane(tile);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
@@ -115,10 +141,10 @@ public class ProductComponent implements FXComponent {
         return this.mainPane;
     }
 
-    private Rectangle createRectangle() {
-        Rectangle rect = new Rectangle(120, 120);
-        rect.setFill(Color.LIGHTGRAY);
-        return rect;
+    private ManagedFragmentHandler<OrderBoxFragment> createOrderFragment(Product p) {
+        ManagedFragmentHandler<OrderBoxFragment> fragment = context.getManagedFragmentHandler(OrderBoxFragment.class);
+        fragment.getController().init(p);
+        return fragment;
     }
 
 

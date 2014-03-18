@@ -26,13 +26,13 @@ public class ProductVerticle extends Verticle {
     public static Integer PORT_NUMER = 8080;
 
     private List<Product> all = new CopyOnWriteArrayList<>(
-            Arrays.asList(new Product("Katze","http://imag1.jpg",200d),
-                    new Product("Hund","http://imag1.jpg",200d),
-                    new Product("Pferd","http://imag1.jpg",2000d),
-                    new Product("Koala","http://imag1.jpg",1000d),
-                    new Product("Tieger","http://imag1.jpg",5000d),
-                    new Product("Giraffe","http://imag1.jpg",2000d),
-                    new Product("Igel","http://imag1.jpg",100d))
+            Arrays.asList(new Product("Katze","box1.jpg",200d),
+                    new Product("Hund","box2.jpg",200d),
+                    new Product("Pferd","box3.jpg",2000d),
+                    new Product("Koala","dog.jpg",1000d),
+                    new Product("Tieger","box1.jpg",5000d),
+                    new Product("Giraffe","box2.jpg",2000d),
+                    new Product("Igel","box3jpg",100d))
     );
     private Gson parser = new Gson();
 
@@ -45,7 +45,6 @@ public class ProductVerticle extends Verticle {
         httpServer.listen(PORT_NUMER);
 
         container.deployVerticle("org.jacpfx.petstore.server.webserver.WebServerVerticle",10);
-        System.out.println("started");
     }
 
     private HttpServer startServer() {
@@ -80,7 +79,7 @@ public class ProductVerticle extends Verticle {
             e.printStackTrace();
         }
 
-        return parser.toJson(all);
+        return parser.toJson(new ProductListDTO(ProductListDTO.State.ALL,all));
     }
 
     private void registerEventBusMessageHandlerAdd() {
@@ -100,15 +99,16 @@ public class ProductVerticle extends Verticle {
     }
 
     private String addProductToProductListAndReturnJSON(final Message<byte[]> message) {
+        Product product = null;
         try {
-            final Product product = MessageUtil.getMessage(message.body(), Product.class);
+            product = MessageUtil.getMessage(message.body(), Product.class);
             all.add(product);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return parser.toJson(all);
+        return parser.toJson(new ProductListDTO(ProductListDTO.State.UPDATE,Arrays.asList(product)));
     }
 
 
@@ -127,10 +127,10 @@ public class ProductVerticle extends Verticle {
                 case "/all":
                     repository.addWebSocket(serverSocket);
                     // reply to first contact
-                    serverSocket.writeTextFrame(parser.toJson(all));
+                    serverSocket.writeTextFrame(parser.toJson(new ProductListDTO(ProductListDTO.State.ALL,all)));
                     // add handler for further calls
                     serverSocket.dataHandler(data -> {
-                        serverSocket.writeTextFrame(parser.toJson(all));
+                        serverSocket.writeTextFrame(parser.toJson(new ProductListDTO(ProductListDTO.State.ALL,all)));
                     });
                     break;
                 case "/update":
