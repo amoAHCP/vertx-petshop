@@ -26,13 +26,14 @@ public class ProductVerticle extends Verticle {
     public static Integer PORT_NUMBER = 8080;
 
     private List<Product> all = new CopyOnWriteArrayList<>(
-            Arrays.asList(new Product(1L,"Katze","http://imag1.jpg",200d),
-                    new Product(1L,"Hund","http://imag1.jpg",200d),
-                    new Product(1L,"Pferd","http://imag1.jpg",2000d),
-                    new Product(1L,"Koala","http://imag1.jpg",1000d),
-                    new Product(1L,"Tieger","http://imag1.jpg",5000d),
-                    new Product(1L,"Giraffe","http://imag1.jpg",2000d),
-                    new Product(1L,"Igel","http://imag1.jpg",100d))
+            Arrays.asList(new Product(1L, "Katze", "cat.jpg", 200d),
+                    new Product(2L, "Hund", "dog.jpg", 200d),
+                    new Product(3L, "Pferd", "horse.jpg", 2000d),
+                    new Product(4L, "Koala", "koala.jpg", 1000d),
+                    new Product(5L, "Tieger", "tiger.jpg", 5000d),
+                    new Product(6L, "Giraffe", "noidea.jpg", 2000d),
+                    new Product(7L, "Igel", "hedgehog.jpg", 100d)
+            )
     );
     private Gson parser = new Gson();
 
@@ -41,11 +42,10 @@ public class ProductVerticle extends Verticle {
         final HttpServer httpServer = startServer();
         registerEventBusWSSession();
         registerEventBusMessageHandlerAddAll();
-        registerEventBusMessageHandlerAdd();
         registerWebsocketHandler(httpServer);
         httpServer.listen(PORT_NUMBER);
 
-        container.deployVerticle("org.jacpfx.petstore.server.webserver.WebServerVerticle",10);
+        container.deployVerticle("org.jacpfx.petstore.server.webserver.WebServerVerticle", 10);
         System.out.println("started");
     }
 
@@ -100,14 +100,13 @@ public class ProductVerticle extends Verticle {
 
     private String addProductToProductListAndReturnJSON(final Message<byte[]> message) {
         try {
-        final Product product = MessageUtil.getMessage(message.body(), Product.class);
-        all.add(product);
+            final Product product = MessageUtil.getMessage(message.body(), Product.class);
+            all.add(product);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return parser.toJson(all);
     }
-
 
 
     private void registerEventBusWSSession() {
@@ -117,8 +116,6 @@ public class ProductVerticle extends Verticle {
     private void handleWSSessionMessage(final Message<ServerWebSocket> socket) {
         repository.addWebSocket(socket.body());
     }
-
-
 
 
     /**
