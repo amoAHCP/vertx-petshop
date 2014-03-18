@@ -45,7 +45,5 @@ public class App extends AFXSpringJavaConfigLauncher {
     @Override
     protected void postInit(Stage stage) {
         final Scene scene = stage.getScene();
-//        stage.getIcons().add(new Image("images/icons/JACP_512_512.png"));
-//        scene.getStylesheets().add(STYLE_FILES[0]);
     }
 }

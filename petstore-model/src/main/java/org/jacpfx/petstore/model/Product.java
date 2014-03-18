@@ -1,6 +1,7 @@
 package org.jacpfx.petstore.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by amo on 16.01.14.
@@ -18,6 +19,14 @@ public class Product implements Serializable {
 
     public Product(final Long id, final String name, final String imageURL, final double price) {
         this.id = id;
+        this.name = name;
+        this.imageURL = imageURL;
+        this.price = price;
+
+    }
+
+    public Product(final String name, final String imageURL, final double price) {
+        this.id = UUID.randomUUID().getMostSignificantBits();
         this.name = name;
         this.imageURL = imageURL;
         this.price = price;

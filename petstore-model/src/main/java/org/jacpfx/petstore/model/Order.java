@@ -2,12 +2,14 @@ package org.jacpfx.petstore.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by amo on 12.03.14.
  */
 // TODO add id and update hashCode
 public class Order implements Serializable {
+    private Long id;
     private List<Product> products;
     private Customer customer;
     private double amount;
@@ -17,6 +19,14 @@ public class Order implements Serializable {
     }
 
     public Order(final double amount, final Customer customer, final List<Product> products) {
+        this.id = UUID.randomUUID().getMostSignificantBits();
+        this.amount = amount;
+        this.customer = customer;
+        this.products = products;
+    }
+
+    public Order(final Long id, final double amount, final Customer customer, final List<Product> products) {
+        this.id = id;
         this.amount = amount;
         this.customer = customer;
         this.products = products;
@@ -54,27 +64,23 @@ public class Order implements Serializable {
         Order order = (Order) o;
 
         if (Double.compare(order.amount, amount) != 0) return false;
-        if (!customer.equals(order.customer)) return false;
-        if (!products.equals(order.products)) return false;
+        if (customer != null ? !customer.equals(order.customer) : order.customer != null) return false;
+        if (!id.equals(order.id)) return false;
+        if (products != null ? !products.equals(order.products) : order.products != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = products.hashCode();
-        result = 31 * result + customer.hashCode();
-        temp = Double.doubleToLongBits(amount);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
+        return id.hashCode();
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "products=" + products +
+                "id=" + id +
+                ", products=" + products +
                 ", customer=" + customer +
                 ", amount=" + amount +
                 '}';

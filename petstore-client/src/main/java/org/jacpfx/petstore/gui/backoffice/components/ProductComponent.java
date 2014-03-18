@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
@@ -96,19 +97,21 @@ public class ProductComponent implements FXComponent {
      */
     private Node createUI() {
         this.mainPane =  new BorderPane();
-
         TilePane tile = new TilePane(Orientation.HORIZONTAL);
         tile.setTileAlignment(Pos.CENTER);
         tile.setVgap(20);
         tile.setHgap(20);
-        tile.setPadding(new Insets(50));
+        tile.setPadding(new Insets(20,0,20,20));
+
 
         int i = 42;
         while (--i >= 0) {
             tile.getChildren().add(this.createRectangle());
         }
-
-        this.mainPane.setCenter(tile);
+        ScrollPane scrollPane = new ScrollPane(tile);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+        this.mainPane.setCenter(scrollPane);
         return this.mainPane;
     }
 
