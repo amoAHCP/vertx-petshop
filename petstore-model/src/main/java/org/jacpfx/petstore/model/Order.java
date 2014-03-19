@@ -2,6 +2,7 @@ package org.jacpfx.petstore.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by amo on 12.03.14.
