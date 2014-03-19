@@ -1,38 +1,57 @@
 package org.jacpfx.petstore.gui.backoffice.components;
 
 import javafx.event.Event;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TextField;
 import org.jacpfx.api.annotations.Resource;
-import org.jacpfx.api.annotations.component.View;
+import org.jacpfx.api.annotations.component.DeclarativeView;
 import org.jacpfx.api.annotations.lifecycle.PostConstruct;
 import org.jacpfx.api.annotations.lifecycle.PreDestroy;
+import org.jacpfx.api.component.Injectable;
 import org.jacpfx.api.message.Message;
+import org.jacpfx.api.util.ToolbarPosition;
 import org.jacpfx.petstore.gui.backoffice.configuration.BaseConfig;
+import org.jacpfx.petstore.model.Product;
 import org.jacpfx.rcp.component.FXComponent;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
+import org.jacpfx.rcp.components.toolBar.JACPToolBar;
 import org.jacpfx.rcp.context.Context;
-import org.jacpfx.rcp.util.FXUtil;
 
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Patrick Symmangk (pete.jacp@gmail.com)
- *
  */
 
-@View(id = BaseConfig.CUSTOMER_COMPONENT_ID, name = "SimpleView", active = true, resourceBundleLocation = "bundles.languageBundle", initialTargetLayoutId = BaseConfig.TARGET_CUSTOMER_COMPONENT_ID)
-public class CustomerComponent implements FXComponent {
+@DeclarativeView(id = BaseConfig.PRODUCT_DETAIL_COMPONENT_ID,
+        name = "SimpleView",
+        active = true,
+        resourceBundleLocation = "bundles.languageBundle",
+        initialTargetLayoutId = BaseConfig.TARGET_CUSTOMER_COMPONENT_ID,
+        viewLocation = "/fxml/OrderDetail.fxml")
+public class ProductDetailComponent implements FXComponent {
 
-    private static final Logger LOGGER = Logger.getLogger(CustomerComponent.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ProductDetailComponent.class.getName());
 
     @Resource
     private Context context;
 
-    private BorderPane mainPane;
+    @FXML
+    private TextField name;
+    @FXML
+    private TextField amount;
+    @FXML
+    private TextField price;
+    @FXML
+    private TextField description;
+
+    private Button save = new Button("save");
+
+    private Product current;
+
 
     @Override
     /**
@@ -40,9 +59,6 @@ public class CustomerComponent implements FXComponent {
      */
     public Node handle(final Message<Event, Object> message) {
         // runs in worker thread
-        if (message.messageBodyEquals(FXUtil.MessageUtil.INIT)) {
-            return createUI();
-        }
         return null;
     }
 
@@ -53,10 +69,20 @@ public class CustomerComponent implements FXComponent {
     public Node postHandle(final Node arg0,
                            final Message<Event, Object> message) {
         // runs in FX application thread
-        if (message.messageBodyEquals(FXUtil.MessageUtil.INIT)) {
-            this.mainPane = (BorderPane) arg0;
+        if (message.isMessageBodyTypeOf(Product.class)) {
+            current = message.getTypedMessageBody(Product.class);
+            name.setText(current.getName());
+            price.setText(Double.toString(current.getPrice()));
+            amount.setText(Integer.toString(current.getAmount()));
+            description.setText(current.getDescription());
+        } else if(message.messageBodyEquals("SAVE")) {
+            if(current!=null) {
+
+            }
+        } else if(message.messageBodyEquals("NEW")) {
+
         }
-        return this.mainPane;
+        return null;
     }
 
     @PostConstruct
@@ -65,9 +91,11 @@ public class CustomerComponent implements FXComponent {
      * @param arg0
      * @param resourceBundle
      */
-    public void onStartComponent(final FXComponentLayout arg0,
+    public void onStartComponent(final FXComponentLayout layout,
                                  final ResourceBundle resourceBundle) {
+        JACPToolBar toolbar = layout.getRegisteredToolBar(ToolbarPosition.NORTH);
 
+       toolbar.add(new Button("save"));
 
     }
 
@@ -77,21 +105,8 @@ public class CustomerComponent implements FXComponent {
      * @param arg0
      */
     public void onTearDownComponent(final FXComponentLayout arg0) {
-        LOGGER.info("run on tear down of CustomerComponent ");
+        LOGGER.info("run on tear down of ProductDetailComponent ");
 
-    }
-
-    /**
-     * create the UI on first call
-     *
-     * @return
-     */
-    private Node createUI() {
-        this.mainPane = new BorderPane();
-        Button b = new Button("CUSTOMERS");
-        this.mainPane.setCenter(b);
-
-        return this.mainPane;
     }
 
 

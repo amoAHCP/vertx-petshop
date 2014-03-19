@@ -2,6 +2,8 @@ package org.jacpfx.petstore.gui.backoffice.fragments;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -36,14 +38,32 @@ public class OrderBoxFragment {
     private Label descriptionLabel;
     @FXML
     private ImageView productImage;
+    private Product p;
 
     public void init(Product p) {
-       rootPane.setOnMouseClicked((event)->{
-           System.out.println("Mouse Event: " + this);
-       });
+        this.p = p;
+        rootPane.setOnMousePressed((event) -> {
+            rootPane.setEffect(new GaussianBlur());
+            context.send(BaseConfig.PRODUCT_DETAIL_COMPONENT_ID, p);
+        });
+
+        rootPane.setOnMouseEntered((event) -> {
+            rootPane.setEffect(new DropShadow());
+        });
+
+        rootPane.setOnMouseExited((event) -> {
+            rootPane.setEffect(null);
+        });
+        rootPane.setOnMouseReleased((event) -> {
+            rootPane.setEffect(null);
+        });
         amountLabel.setText("1");
         priceLabel.setText(Double.toString(p.getPrice()));
         nameLabel.setText(p.getName());
-        if(p.getImageURL()!=null && p.getImageURL().length()>1)productImage.setImage(new Image("/images/products/"+p.getImageURL()));
+        descriptionLabel.setText(p.getDescription());
+        amountLabel.setText(Integer.toString(p.getAmount()));
+
+        if (p.getImageURL() != null && p.getImageURL().length() > 1)
+            productImage.setImage(new Image("/images/products/" + p.getImageURL()));
     }
 }

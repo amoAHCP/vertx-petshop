@@ -15,7 +15,7 @@ public class BaseConfig {
     // ***** PERSPECTIVES *****
     public static final String PETSTORE_PERSPECTIVE_ID = "p01";
     // ***** COMPONENTS *****
-    public static final String CUSTOMER_COMPONENT_ID = "c01";
+    public static final String PRODUCT_DETAIL_COMPONENT_ID = "c01";
     public static final String PRODUCT_COMPONENT_ID = "c02";
     public static final String WSPRODUCT_COMPONENT_ID = "c03";
 

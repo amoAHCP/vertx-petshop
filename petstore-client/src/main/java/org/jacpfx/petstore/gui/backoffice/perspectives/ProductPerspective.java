@@ -33,7 +33,7 @@ import java.util.ResourceBundle;
 
 
 @Perspective(id = BaseConfig.PETSTORE_PERSPECTIVE_ID, name = "contactPerspective",
-        components = {BaseConfig.CUSTOMER_COMPONENT_ID, BaseConfig.PRODUCT_COMPONENT_ID,BaseConfig.WSPRODUCT_COMPONENT_ID},
+        components = {BaseConfig.PRODUCT_DETAIL_COMPONENT_ID, BaseConfig.PRODUCT_COMPONENT_ID,BaseConfig.WSPRODUCT_COMPONENT_ID},
         viewLocation = "/fxml/ProductPerspective.fxml",
         resourceBundleLocation = "bundles.languageBundle")
 public class ProductPerspective implements FXPerspective {
@@ -84,7 +84,7 @@ public class ProductPerspective implements FXPerspective {
         pressMe.setOnAction((event) -> {
             context.showModalDialog(JACPDialogUtil.createOptionPane("Some Dialog", "This is a Dialog, OK?"));
         });
-        toolbar.addAllOnEnd(pressMe);
+       // toolbar.addAllOnEnd(pressMe);
     }
 
     @PreDestroy

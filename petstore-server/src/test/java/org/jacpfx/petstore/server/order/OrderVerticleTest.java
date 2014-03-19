@@ -113,10 +113,10 @@ public class OrderVerticleTest {
 
         outer.await();
 
-        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(1,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D))))));
-        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(2,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D))))));
-        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(3,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D))))));
-        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(4,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D))))));
+        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(1,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D,2,"s"))))));
+        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(2,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D,3,"a"))))));
+        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(3,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D,2,""))))));
+        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(4,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D,1,"cdv"))))));
 
         inner.await();
         assertFalse(allOrders.isEmpty());
@@ -142,7 +142,7 @@ public class OrderVerticleTest {
 
         }, "/placeOrder");
         outer.await();
-         Order order = new Order(1,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D)));
+         Order order = new Order(1,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D,2,"")));
 
         String orderJson = parser.toJson(order);
         wsUpdateTemp[0].writeTextFrame(orderJson);

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<HBox fx:id="rootPane" style="-fx-background-color: #bcbcbc;" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1">
+
+    <children>
+
+        <Pane maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <VBox alignment="CENTER_LEFT" maxWidth="Infinity" prefWidth="500.0"  HBox.hgrow="ALWAYS">
+            <children>
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <Label prefWidth="100.0" prefHeight="30" text="Name:"/>
+                        <TextField fx:id="name" alignment="CENTER_RIGHT" prefHeight="30" prefWidth="400" maxWidth="Infinity">
+                            <padding>
+                                <Insets left="10.0"/>
+                            </padding>
+                        </TextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <Label prefWidth="100.0" text="Price"/>
+                        <TextField fx:id="price" alignment="CENTER_RIGHT" prefHeight="30" prefWidth="400" maxWidth="Infinity"
+                                   xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                            <padding>
+                                <Insets left="10.0"/>
+                            </padding>
+                        </TextField>
+                    </children>
+                    <padding>
+                        <Insets top="10.0"/>
+                    </padding>
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <Label prefWidth="100.0" text="Amount"/>
+                        <TextField fx:id="amount" alignment="CENTER_RIGHT" prefHeight="30" prefWidth="400" maxWidth="Infinity"
+                                   xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                            <padding>
+                                <Insets left="10.0"/>
+                            </padding>
+                        </TextField>
+                    </children>
+                    <padding>
+                        <Insets top="10.0"/>
+                    </padding>
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <Label prefWidth="100.0" text="Description:"/>
+                        <TextField fx:id="description" alignment="CENTER_RIGHT" prefHeight="30" prefWidth="400" maxWidth="Infinity"
+                                   xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                            <padding>
+                                <Insets left="10.0"/>
+                            </padding>
+                        </TextField>
+                    </children>
+                    <padding>
+                        <Insets top="10.0"/>
+                    </padding>
+                </HBox>
+            </children>
+        </VBox>
+        <Pane maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <VBox alignment="CENTER_RIGHT">
+            <children>
+                <ComboBox xmlns:fx="http://javafx.com/fxml">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Item 1"/>
+                            <String fx:value="Item 2"/>
+                            <String fx:value="Item 3"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true"/>
+            </children>
+        </VBox>
+    </children>
+
+</HBox>
