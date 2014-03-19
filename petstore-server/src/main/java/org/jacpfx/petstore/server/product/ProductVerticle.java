@@ -40,8 +40,8 @@ public class ProductVerticle extends Verticle {
     @Override
     public void start() {
         final HttpServer httpServer = startServer();
-        registerEventBusWSSession();
         registerEventBusMessageHandlerAddAll();
+        registerEventBusMessageHandlerAdd();
         registerWebsocketHandler(httpServer);
         httpServer.listen(PORT_NUMBER);
 
@@ -109,13 +109,7 @@ public class ProductVerticle extends Verticle {
     }
 
 
-    private void registerEventBusWSSession() {
-        vertx.eventBus().registerHandler("org.jacpfx.petstore.session", this::handleWSSessionMessage);
-    }
 
-    private void handleWSSessionMessage(final Message<ServerWebSocket> socket) {
-        repository.addWebSocket(socket.body());
-    }
 
 
     /**
@@ -125,7 +119,7 @@ public class ProductVerticle extends Verticle {
      */
     private void registerWebsocketHandler(final HttpServer httpServer) {
         httpServer.websocketHandler((serverSocket) -> {
-            String path = serverSocket.path();
+            final String path = serverSocket.path();
             switch (path) {
                 case "/all":
                     repository.addWebSocket(serverSocket);
