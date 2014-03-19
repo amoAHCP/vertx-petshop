@@ -17,6 +17,11 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.jacpfx.petstore</groupId>
+            <artifactId>petstore-model</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.jacpfx</groupId>
             <artifactId>jacpfx.API</artifactId>
             <version>${jacp.version}</version>
