@@ -1,7 +1,7 @@
 <html ng-app="Petstore">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../css/bootstrap.css" media="screen">
+    <link rel="stylesheet" href="../css/bootstrap.min.css" media="screen">
     <link rel="stylesheet" href="../css/bootswatch.min.css">
     <link rel="stylesheet" href="../css/petstore.css">
 </head>
@@ -52,18 +52,96 @@
     </div>
 </div>
 <div class="container">
-    <div class="product-matrix">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="product" ng-repeat="item in pets track by $index">
-                    <img src="{{item.imageURL}}"/>
-                    <label>{{item.name}}</label>
-                    <label>{{item.price}}</label>
-                    <button type="button" ng-click="placeOrder(item)">Update</button>
+    <form name="loginForm" novalidate ng-submit="placeOrder()">
+        <div class="page-header" id="banner">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1>Petstore</h1>
+
+                    <p class="lead">Choose a Pet</p>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="col-sm-6 col-md-4" ng-repeat="item in pets track by $index">
+                    <div class="thumbnail">
+                        <img data-src="{{item.imageURL}}" alt="{{item.name}}">
+
+                        <div class="caption">
+                            <h3>{{item.name}}</h3>
+
+                            <p>CHF {{item.price}}</p>
+
+                            <p>
+                                <button type="button" ng-click="addToBasket(item)">add</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="col-sm-6 col-md-4">
+                    <ul>
+                        <li ng-repeat="item in order.products track by $index">
+                            {{item.name}} - {{item.price}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!-- FIRSTNAME -->
+                <div class="form-group"
+                     ng-class="{'has-error': order.customer.firstname.$invalid}">
+                    <input class="form-control" name="firstname" type="text"
+                           placeholder="Firstname" required ng-model="order.customer.firstname"/>
+                    <span class="help-block" ng-show="order.customer.firstname.$error.required">Required</span>
+                </div>
+                <!-- LASTNAME -->
+                <div class="form-group" ng-class="{'has-error': order.customer.lastname.$invalid}">
+                    <input class="form-control" name="firstname" type="text"
+                           placeholder="Lastname" required ng-model="order.customer.lastname"/>
+                    <span class="help-block" ng-show="order.customer.lastname.$error.required">Required</span>
+                </div>
+                <!-- ADDRESS -->
+                <div class="form-group" ng-class="{'has-error': order.customer.homeAddress.street1.$invalid}">
+                    <input class="form-control" name="firstname" type="text"
+                           placeholder="Street" required ng-model="order.customer.homeAddress.street1"/>
+                    <span class="help-block"
+                          ng-show="order.customer.homeAddress.street1.$error.required">Required</span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': order.customer.homeAddress.zipcode.$invalid}">
+                    <input class="form-control" name="firstname" type="text"
+                           placeholder="Zip" required maxlength="4" ng-model="order.customer.homeAddress.zipcode"/>
+                    <span class="help-block"
+                          ng-show="order.customer.homeAddress.zipcode.$error.required">Required</span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': order.customer.homeAddress.city.$invalid}">
+                    <input class="form-control" name="firstname" type="text"
+                           placeholder="City" required ng-model="order.customer.homeAddress.city"/>
+                    <span class="help-block" ng-show="order.customer.homeAddress.city.$error.required">Required</span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': order.customer.homeAddress.country.$invalid}">
+                    <input class="form-control" name="firstname" type="text"
+                           placeholder="Country" required ng-model="order.customer.homeAddress.country"/>
+                    <span class="help-block"
+                          ng-show="order.customer.homeAddress.country.$error.required">Required</span>
+                </div>
+
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary pull-right"
+                            value="Login" title="Login" ng-disabled="!loginForm.$valid&&!order.basket.length">
+                        <span>placeOrder</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 
 
     <!--FOOTER-->

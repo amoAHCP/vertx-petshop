@@ -1,6 +1,7 @@
 package org.jacpfx.petstore.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by amo on 16.01.14.
@@ -8,20 +9,16 @@ import java.io.Serializable;
 public class Basket implements Serializable {
 
     private Long id;
-    private String name;
-    private String imageURL;
-    private double price;
+
+    private List<BasketItem> basketItems;
+
 
     public Basket() {
 
     }
 
-    public Basket(final Long id, final String name, final String imageURL, final double price) {
-        this.id = id;
-        this.name = name;
-        this.imageURL = imageURL;
-        this.price = price;
-
+    public Basket(List<BasketItem> basketItems) {
+        this.basketItems = basketItems;
     }
 
     /**
@@ -42,27 +39,11 @@ public class Basket implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public List<BasketItem> getBasketItems() {
+        return basketItems;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+    public void setBasketItems(List<BasketItem> basketItems) {
+        this.basketItems = basketItems;
     }
 }

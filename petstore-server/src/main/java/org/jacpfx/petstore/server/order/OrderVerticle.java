@@ -27,7 +27,7 @@ public class OrderVerticle extends Verticle {
     private WebSocketRepository shopRepository = new WebSocketRepository();
     private Set<Order> all = new HashSet<>();
 
-    public static Integer PORT_NUMER = 9090;
+    public static Integer PORT_NUMBER = 9090;
     private Gson parser = new Gson();
 
     @Override
@@ -36,7 +36,7 @@ public class OrderVerticle extends Verticle {
         registerEventBusMessageHandlerPlaceOrder();
         registerEventBusMessageHandlerUpdateOrder();
         registerWebsocketHandler(httpServer);
-        httpServer.listen(PORT_NUMER);
+        httpServer.listen(PORT_NUMBER);
         System.out.println("Order started");
     }
 
@@ -54,12 +54,10 @@ public class OrderVerticle extends Verticle {
             addOrderAndBroadCast(orderProcessing.getOrder());
             final Optional<ServerWebSocket> result = shopRepository.getWebSockets().
                     parallelStream().
-                    filter(socket ->                            socket.textHandlerID().equals(orderProcessing.getWsTextFrameID())
+                    filter(socket -> socket.textHandlerID().equals(orderProcessing.getWsTextFrameID())
                     ).findFirst();
-            if(result.isPresent())result.get().writeTextFrame("OK");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+            if (result.isPresent()) result.get().writeTextFrame("OK");
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -78,9 +76,7 @@ public class OrderVerticle extends Verticle {
         try {
             final Order order = MessageUtil.getMessage(message.body(), Order.class);
             addOrderAndBroadCast(order);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

@@ -90,9 +90,7 @@ public class OrderVerticleTest {
                 OrderListDTO orders = null;
                 try {
                     orders = MessageUtil.getMessage(data.getBytes(), OrderListDTO.class);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
                 assertNotNull(orders);

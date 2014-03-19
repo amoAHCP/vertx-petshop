@@ -12,21 +12,16 @@ import org.vertx.java.platform.Verticle;
  */
 public class WebServerVerticle extends Verticle {
     public static Integer PORT_NUMBER = 8000;
+
     @Override
     public void start() {
         HttpServer server = startServer();
         RouteMatcher rm = new RouteMatcher();
 
 
-        rm.get("/",(request)->{
-            System.out.println("Path: "+request.path());
+        rm.get("/", (request) -> {
+            System.out.println("Path: " + request.path());
             this.handlePath("index.html", request);
-        });
-
-        rm.get("/web/.*",(request)->{
-            System.out.println("Path WEB: "+request.path());
-            String file = request.path().equals("/") ? "index.html" : request.path();
-            request.response().sendFile(file.substring(1));
         });
 
         // TODO add better REGEX to provide more security
@@ -37,8 +32,7 @@ public class WebServerVerticle extends Verticle {
         // TODO add better REGEX to provide more security
         rm.getWithRegEx("/css/.*", (request) -> {
             System.out.println("Path css: " + request.path());
-            String file = request.path().equals("/") ? "index.html" : request.path();
-            request.response().sendFile("web" + file);
+            this.handlePath("index.html", request);
         });
 
         rm.getWithRegEx("/img/.*", (request) -> {
@@ -46,15 +40,15 @@ public class WebServerVerticle extends Verticle {
             this.handlePath(GlobalConstants.DUMMY_PICTURE, request);
         });
         server.requestHandler(rm).listen(PORT_NUMBER);
-         // if no resource allowed
+        // if no resource allowed
         //req.response().setStatusCode(404);
         //req.response().end();
 
     }
 
-    private void handlePath(String defaultFile, HttpServerRequest request){
+    private void handlePath(String defaultFile, HttpServerRequest request) {
         String file = request.path().equals("/") ? defaultFile : request.path();
-        request.response().sendFile("web" + file);
+        request.response().sendFile("web/" + file);
 
     }
 
