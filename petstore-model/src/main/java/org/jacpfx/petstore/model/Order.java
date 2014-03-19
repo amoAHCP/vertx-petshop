@@ -9,6 +9,8 @@ import java.util.List;
 // TODO add id and update hashCode
 public class Order implements Serializable {
     private Basket basket;
+    private Long id;
+    private List<Product> products;
     private Customer customer;
     private double amount;
 
@@ -17,6 +19,7 @@ public class Order implements Serializable {
     }
 
     public Order(final double amount, final Customer customer, final List<Product> products) {
+        this.id = UUID.randomUUID().getMostSignificantBits();
         this.amount = amount;
         this.customer = customer;
         this.basket = basket;
@@ -47,27 +50,24 @@ public class Order implements Serializable {
         Order order = (Order) o;
 
         if (Double.compare(order.amount, amount) != 0) return false;
-        if (!customer.equals(order.customer)) return false;
-        if (!basket.equals(order.basket)) return false;
+        if (customer != null ? !customer.equals(order.customer) : order.customer != null) return false;
+        if (!id.equals(order.id)) return false;
+        if (products != null ? !products.equals(order.products) : order.products != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = basket.hashCode();
-        result = 31 * result + customer.hashCode();
-        temp = Double.doubleToLongBits(amount);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
+        return id.hashCode();
     }
 
     @Override
     public String toString() {
         return "Order{" +
                 "basket=" + basket +
+                "id=" + id +
+                ", products=" + products +
                 ", customer=" + customer +
                 ", amount=" + amount +
                 '}';

@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.jacpfx.petstore.dto.ProductListDTO;
 import org.jacpfx.petstore.model.Product;
-import org.jacpfx.petstore.util.MessageUtil;
 import org.jacpfx.petstore.util.Serializer;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.vertx.java.core.Handler;
@@ -26,13 +23,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by amo on 25.02.14.
@@ -189,8 +186,8 @@ public class ProductVerticleTest {
                 Type collectionType = new TypeToken<List<Product>>(){}.getType();
                 String json =  data.getString(0, data.length());
                 assertNotNull(json);
-                productList.clear();
-                productList.addAll(parser.fromJson(json, collectionType));
+
+                productList.addAll(parser.fromJson(json, ProductListDTO.class).getProducts());
                 inner[0].countDown();
             });
         }, "/all");
@@ -214,7 +211,7 @@ public class ProductVerticleTest {
 
         }, "/update");
         outerUpdate.await();
-        Product p1 = new Product(100L,"KatzeGrau","",10);
+        Product p1 = new Product(100L,"KatzeGrau","",10,2,"ziemlich alt");
         // send product
         wsSendTemp[0].write(new Buffer(Serializer.serialize(p1)));
         inner[0].await();
@@ -222,7 +219,7 @@ public class ProductVerticleTest {
         assertTrue(size+1==productList.size());
 
         inner[0] = new CountDownLatch(1);
-        Product p2 = new Product(101L,"HundWeiss","",10);
+        Product p2 = new Product(101L,"Hund","",10,5,"weisser Hund");
         // send product
         wsSendTemp[0].write(new Buffer(Serializer.serialize(p2)));
 
@@ -256,8 +253,8 @@ public class ProductVerticleTest {
                 Type collectionType = new TypeToken<List<Product>>(){}.getType();
                 String json =  data.getString(0, data.length());
                 assertNotNull(json);
-                productList.clear();
-                productList.addAll(parser.fromJson(json, collectionType));
+
+                productList.addAll(parser.fromJson(json, ProductListDTO.class).getProducts());
                 inner[0].countDown();
             });
         }, "/all");
@@ -281,18 +278,18 @@ public class ProductVerticleTest {
         }, "/updateAll");
         outerUpdate.await();
         // send product
-        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(Arrays.asList(new Product(100L,"KatzeGrau","",10),new Product(101L,"HundWeiss","",10))))));
+        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(ProductListDTO.State.UPDATE,Arrays.asList(new Product(100L,"KatzeGrau","box1.png",10,1,"kaum Fell"),new Product(101L,"HundWeiss","box2.png",10,1,"Sonderling"))))));
         inner[0].await();
         assertFalse(productList.isEmpty());
-        assertTrue(2==productList.size());
+        assertTrue(6==productList.size());
 
         inner[0] = new CountDownLatch(1);
         // send product
-        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(Arrays.asList(new Product(103L,"Irgendeintier","",10),new Product(100L,"KatzeGrau","",10),new Product(101L,"HundWeiss","",10))))));
+        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(ProductListDTO.State.UPDATE,Arrays.asList(new Product(103L,"Irgendeintier","box1.png",10,2,"noch nie gesehen"),new Product(100L,"KatzeGrau","box2.png",10,10,"frisst viel"),new Product(101L,"HundWeiss","box3.png",10,3,"schon wieder"))))));
 
         inner[0].await();
         assertFalse(productList.isEmpty());
-        assertTrue(3==productList.size());
+        assertTrue(9==productList.size());
         client.close();
     }
 }

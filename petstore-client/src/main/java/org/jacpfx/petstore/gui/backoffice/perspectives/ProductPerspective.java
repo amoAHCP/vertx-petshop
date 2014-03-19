@@ -11,8 +11,6 @@ package org.jacpfx.petstore.gui.backoffice.perspectives;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import org.jacpfx.api.annotations.Resource;
@@ -23,29 +21,25 @@ import org.jacpfx.api.annotations.perspective.Perspective;
 import org.jacpfx.api.message.Message;
 import org.jacpfx.api.util.ToolbarPosition;
 import org.jacpfx.controls.optionPane.JACPDialogUtil;
-import org.jacpfx.controls.optionPane.JACPOptionPane;
 import org.jacpfx.petstore.gui.backoffice.configuration.BaseConfig;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
 import org.jacpfx.rcp.componentLayout.PerspectiveLayout;
 import org.jacpfx.rcp.components.toolBar.JACPToolBar;
 import org.jacpfx.rcp.context.Context;
 import org.jacpfx.rcp.perspective.FXPerspective;
-import org.jacpfx.rcp.util.CSSUtil;
 import org.jacpfx.rcp.util.FXUtil;
-import org.jacpfx.rcp.util.LayoutUtil;
 
 import java.util.ResourceBundle;
 
 
 @Perspective(id = BaseConfig.PETSTORE_PERSPECTIVE_ID, name = "contactPerspective",
-        components = {BaseConfig.CUSTOMER_COMPONENT_ID, BaseConfig.PRODUCT_COMPONENT_ID},
-        viewLocation = "/fxml/petstorePerspective.fxml",
+        components = {BaseConfig.PRODUCT_DETAIL_COMPONENT_ID, BaseConfig.PRODUCT_COMPONENT_ID,BaseConfig.WSPRODUCT_COMPONENT_ID},
+        viewLocation = "/fxml/ProductPerspective.fxml",
         resourceBundleLocation = "bundles.languageBundle")
-public class PetstorePerspective implements FXPerspective {
+public class ProductPerspective implements FXPerspective {
     @Resource
     public Context context;
-    @FXML
-    private BorderPane componentMain;
+
     @FXML
     private GridPane customerComponent;
     @FXML
@@ -56,9 +50,10 @@ public class PetstorePerspective implements FXPerspective {
     public void handlePerspective(final Message<Event, Object> action,
                                   final PerspectiveLayout perspectiveLayout) {
         if (action.messageBodyEquals(FXUtil.MessageUtil.INIT)) {
-            LayoutUtil.GridPaneUtil.setFullGrow(Priority.ALWAYS, this.componentMain);
-            // Register root components
-            perspectiveLayout.registerRootComponent(this.componentMain);
+            GridPane.setVgrow(perspectiveLayout.getRootComponent(),
+                    Priority.ALWAYS);
+            GridPane.setHgrow(perspectiveLayout.getRootComponent(),
+                    Priority.ALWAYS);
             // register left menu
             perspectiveLayout.registerTargetLayoutComponent(BaseConfig.TARGET_CUSTOMER_COMPONENT_ID, this.customerComponent);
             // register main content
@@ -89,7 +84,7 @@ public class PetstorePerspective implements FXPerspective {
         pressMe.setOnAction((event) -> {
             context.showModalDialog(JACPDialogUtil.createOptionPane("Some Dialog", "This is a Dialog, OK?"));
         });
-        toolbar.addAllOnEnd(pressMe);
+       // toolbar.addAllOnEnd(pressMe);
     }
 
     @PreDestroy
