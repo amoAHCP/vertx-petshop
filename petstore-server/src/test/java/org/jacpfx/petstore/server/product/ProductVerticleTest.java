@@ -277,11 +277,12 @@ public class ProductVerticleTest {
 
         }, "/updateAll");
         outerUpdate.await();
+        int size = productList.size();
         // send product
         wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(ProductListDTO.State.UPDATE,Arrays.asList(new Product(100L,"KatzeGrau","box1.png",10,1,"kaum Fell"),new Product(101L,"HundWeiss","box2.png",10,1,"Sonderling"))))));
         inner[0].await();
         assertFalse(productList.isEmpty());
-        assertTrue(6==productList.size());
+        assertTrue(size+2==productList.size());
 
         inner[0] = new CountDownLatch(1);
         // send product
@@ -289,7 +290,7 @@ public class ProductVerticleTest {
 
         inner[0].await();
         assertFalse(productList.isEmpty());
-        assertTrue(9==productList.size());
+        assertTrue(size+5==productList.size());
         client.close();
     }
 }
