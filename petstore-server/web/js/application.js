@@ -24,7 +24,6 @@ var ItemListController = function ($scope) {
     }
 
     var itemWS = new WebSocket("ws://localhost:8080/all");
-    var updateItemWS = new WebSocket("ws://localhost:8080/update");
     var orderWS = new WebSocket("ws://localhost:9090/placeOrder");
 
     itemWS.onopen = function () {
@@ -35,15 +34,6 @@ var ItemListController = function ($scope) {
         console.log("order WS open");
     }
 
-    updateItemWS.onopen = function () {
-        console.log("updateItemWS open");
-    }
-
-    updateItemWS.onmessage = function (msg) {
-        $scope.$apply(function () {
-            $scope.pets.push(JSON.parse(msg.data));
-        });
-    }
 
     orderWS.onmessage = function (msg) {
         console.log(msg);
@@ -53,7 +43,14 @@ var ItemListController = function ($scope) {
 
     itemWS.onmessage = function (msg) {
         $scope.$apply(function () {
-            $scope.pets = JSON.parse(msg.data).products;
+            var container = JSON.parse(msg.data);
+            if (container.state == "UPDATE") {
+                container.products.forEach(function (element) {
+                    $scope.pets.push(element);
+                });
+            } else {
+                $scope.pets = container.products;
+            }
         });
     }
     // adding some items to the basket
