@@ -46,6 +46,7 @@ var ItemListController = function ($scope) {
     }
 
     orderWS.onmessage = function (msg) {
+        console.log(msg);
         $('#waitModal').modal('hide');
     }
 
