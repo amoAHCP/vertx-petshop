@@ -9,7 +9,6 @@ import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.component.DeclarativeView;
 import org.jacpfx.api.annotations.lifecycle.PostConstruct;
 import org.jacpfx.api.annotations.lifecycle.PreDestroy;
-import org.jacpfx.api.component.Injectable;
 import org.jacpfx.api.message.Message;
 import org.jacpfx.api.util.ToolbarPosition;
 import org.jacpfx.petstore.gui.backoffice.configuration.BaseConfig;
@@ -75,11 +74,11 @@ public class ProductDetailComponent implements FXComponent {
             price.setText(Double.toString(current.getPrice()));
             amount.setText(Integer.toString(current.getAmount()));
             description.setText(current.getDescription());
-        } else if(message.messageBodyEquals("SAVE")) {
-            if(current!=null) {
+        } else if (message.messageBodyEquals("SAVE")) {
+            if (current != null) {
 
             }
-        } else if(message.messageBodyEquals("NEW")) {
+        } else if (message.messageBodyEquals("NEW")) {
 
         }
         return null;
@@ -95,7 +94,7 @@ public class ProductDetailComponent implements FXComponent {
                                  final ResourceBundle resourceBundle) {
         JACPToolBar toolbar = layout.getRegisteredToolBar(ToolbarPosition.NORTH);
 
-       toolbar.add(new Button("save"));
+        toolbar.add(new Button("save"));
 
     }
 
