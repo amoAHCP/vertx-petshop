@@ -66,4 +66,25 @@ public class OrderBoxFragment {
         if (p.getImageURL() != null && p.getImageURL().length() > 1)
             productImage.setImage(new Image("/images/products/" + p.getImageURL()));
     }
+
+    public Product getProduct() {
+        return p;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (p == o) return true;
+        if (!(o instanceof Product)) return false;
+
+        Product that = (Product) o;
+
+        if (p != null ? !p.equals(that) : that != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return p != null ? p.hashCode() : 0;
+    }
 }
