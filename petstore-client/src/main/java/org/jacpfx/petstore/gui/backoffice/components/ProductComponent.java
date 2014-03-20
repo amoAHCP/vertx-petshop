@@ -23,10 +23,8 @@ import org.jacpfx.rcp.component.FXComponent;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
 import org.jacpfx.rcp.components.managedFragment.ManagedFragmentHandler;
 import org.jacpfx.rcp.context.Context;
-import org.jacpfx.rcp.util.FXUtil;
 
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -41,7 +39,6 @@ import java.util.stream.Collectors;
 
 @View(id = BaseConfig.PRODUCT_COMPONENT_ID, name = "SimpleView", active = true, resourceBundleLocation = "bundles.languageBundle", initialTargetLayoutId = BaseConfig.TARGET_PRODUCT_COMPONENT_ID)
 public class ProductComponent implements FXComponent {
-
 
 
     private static final Logger LOGGER = Logger.getLogger(ProductComponent.class.getName());
@@ -64,19 +61,17 @@ public class ProductComponent implements FXComponent {
     public Node handle(final Message<Event, Object> message) {
         // runs in worker thread
 
-        if (message.messageBodyEquals(FXUtil.MessageUtil.INIT)) {
-            return createUI();
-        } else if(message.isMessageBodyTypeOf(ProductListDTO.class)){
+        if (message.isMessageBodyTypeOf(ProductListDTO.class)) {
             ProductListDTO dto = message.getTypedMessageBody(ProductListDTO.class);
 
             final List<ManagedFragmentHandler<OrderBoxFragment>> collect = dto.getProducts().parallelStream().map(p -> createOrderFragment(p)).collect(Collectors.toList());
-            if(dto.getState().equals(ProductListDTO.State.ALL)) {
+            if (dto.getState().equals(ProductListDTO.State.ALL)) {
                 fragmentList.clear();
                 fragmentList.addAll(collect);
             } else {
                 fragmentSubList.clear();
                 fragmentSubList.addAll(collect);
-                fragmentList.addAll(collect);
+
 
             }
 
@@ -91,21 +86,48 @@ public class ProductComponent implements FXComponent {
     public Node postHandle(final Node arg0,
                            final Message<Event, Object> message) {
         // runs in FX application thread
-        if (message.messageBodyEquals(FXUtil.MessageUtil.INIT)) {
-            this.mainPane = (BorderPane) arg0;
-        } else if(message.isMessageBodyTypeOf(ProductListDTO.class)){
+        if (message.isMessageBodyTypeOf(ProductListDTO.class)) {
             ProductListDTO dto = message.getTypedMessageBody(ProductListDTO.class);
-            if(dto.getState().equals(ProductListDTO.State.ALL)) {
+            if (dto.getState().equals(ProductListDTO.State.ALL)) {
                 final List<Node> collect = fragmentList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
                 tile.getChildren().clear();
                 tile.getChildren().addAll(collect);
             } else {
-                final List<Node> collect1 = fragmentSubList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
-                tile.getChildren().addAll(collect1);
+                addOrReplaceProduct();
             }
 
         }
         return this.mainPane;
+    }
+
+    private void addOrReplaceProduct() {
+        final Map<Integer, ManagedFragmentHandler<OrderBoxFragment>> indexMap = findProductsToReplace();
+        if (indexMap.isEmpty()) {
+            // add new products
+            final List<Node> collect1 = fragmentSubList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
+            tile.getChildren().addAll(collect1);
+        } else {
+            // replace product
+            indexMap.entrySet().forEach(entry -> {
+                fragmentList.remove(entry.getKey());
+                tile.getChildren().set(entry.getKey(), entry.getValue().getFragmentNode());
+            });
+        }
+
+        fragmentList.addAll(fragmentSubList);
+    }
+
+    private Map<Integer, ManagedFragmentHandler<OrderBoxFragment>> findProductsToReplace() {
+        final Map<Integer, ManagedFragmentHandler<OrderBoxFragment>> indexMap = new HashMap<>();
+        fragmentSubList.forEach(p -> {
+            final Optional<ManagedFragmentHandler<OrderBoxFragment>> first = fragmentList.parallelStream().filter(fragment -> fragment.getController().equals(p.getController().getProduct())).findFirst();
+            if (first.isPresent()) {
+                int index = fragmentList.indexOf(first.get());
+                indexMap.put(index, p);
+            }
+
+        });
+        return indexMap;
     }
 
     @PostConstruct
@@ -116,7 +138,7 @@ public class ProductComponent implements FXComponent {
      */
     public void onStartComponent(final FXComponentLayout arg0,
                                  final ResourceBundle resourceBundle) {
-
+        createUI();
 
     }
 
@@ -136,18 +158,13 @@ public class ProductComponent implements FXComponent {
      * @return
      */
     private Node createUI() {
-        this.mainPane =  new BorderPane();
+        this.mainPane = new BorderPane();
 
         tile.setTileAlignment(Pos.CENTER);
         tile.setVgap(20);
         tile.setHgap(20);
-        tile.setPadding(new Insets(20,0,20,20));
+        tile.setPadding(new Insets(20, 0, 20, 20));
 
-
-       /* int i = 42;
-        while (--i >= 0) {
-            tile.getChildren().add(this.createRectangle());
-        }*/
         ScrollPane scrollPane = new ScrollPane(tile);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);

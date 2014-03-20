@@ -37,7 +37,7 @@ public class PetstoreWorkbench implements FXWorkbench {
     @Override
     public void handleInitialLayout(Message<Event, Object> action, WorkbenchLayout<Node> layout, Stage stage) {
         this.stage = stage;
-        layout.setWorkbenchXYSize(1280, 1024);
+        layout.setWorkbenchXYSize(1024, 768);
         layout.registerToolBars(ToolbarPosition.NORTH);
         layout.setMenuEnabled(true);
     }

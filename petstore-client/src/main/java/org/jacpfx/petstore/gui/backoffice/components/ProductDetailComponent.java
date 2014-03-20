@@ -2,9 +2,13 @@ package org.jacpfx.petstore.gui.backoffice.components;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.component.DeclarativeView;
 import org.jacpfx.api.annotations.lifecycle.PostConstruct;
@@ -15,6 +19,7 @@ import org.jacpfx.petstore.gui.backoffice.configuration.BaseConfig;
 import org.jacpfx.petstore.model.Product;
 import org.jacpfx.rcp.component.FXComponent;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
+import org.jacpfx.rcp.components.toolBar.JACPOptionButton;
 import org.jacpfx.rcp.components.toolBar.JACPToolBar;
 import org.jacpfx.rcp.context.Context;
 
@@ -46,8 +51,12 @@ public class ProductDetailComponent implements FXComponent {
     private TextField price;
     @FXML
     private TextField description;
+    @FXML
+    private VBox imagePanel;
 
     private Button save = new Button("save");
+    private Button create = new Button("create");
+    private ImageView imageView = new ImageView();
 
     private Product current;
 
@@ -69,19 +78,21 @@ public class ProductDetailComponent implements FXComponent {
                            final Message<Event, Object> message) {
         // runs in FX application thread
         if (message.isMessageBodyTypeOf(Product.class)) {
+            save.setDisable(true);
             current = message.getTypedMessageBody(Product.class);
-            name.setText(current.getName());
-            price.setText(Double.toString(current.getPrice()));
-            amount.setText(Integer.toString(current.getAmount()));
-            description.setText(current.getDescription());
-        } else if (message.messageBodyEquals("SAVE")) {
-            if (current != null) {
-
-            }
-        } else if (message.messageBodyEquals("NEW")) {
-
+            init(current);
         }
         return null;
+    }
+
+    private void init(Product product) {
+        name.setText(product.getName());
+        price.setText(Double.toString(product.getPrice()));
+        amount.setText(Integer.toString(product.getAmount()));
+        description.setText(product.getDescription());
+        String imageUrl = product.getImageURL() != null ? product.getImageURL() : "box1.png";
+        imageUrl = imageUrl.isEmpty() ? "box1.png" : imageUrl;
+        imageView.setImage(new Image("/images/products/" + imageUrl));
     }
 
     @PostConstruct
@@ -93,9 +104,114 @@ public class ProductDetailComponent implements FXComponent {
     public void onStartComponent(final FXComponentLayout layout,
                                  final ResourceBundle resourceBundle) {
         JACPToolBar toolbar = layout.getRegisteredToolBar(ToolbarPosition.NORTH);
+        save.setDisable(true);
+        save.setOnMousePressed((event) -> {
+            if (current != null) {
+                final Product p = save(current);
+                context.send(BaseConfig.WSPRODUCT_COMPONENT_ID, p);
+                save.setDisable(true);
+            }
+        });
 
-        toolbar.add(new Button("save"));
+        create.setOnMousePressed((event) -> {
+            current = new Product("", "", 0, 0, "");
+            init(current);
+            save.setDisable(true);
+        });
 
+        toolbar.addAllOnEnd("ddd", save, create);
+
+        name.setOnKeyReleased((listener) -> {
+            if (current != null) {
+                if (!name.getText().equals(current.getName())) {
+                    save.setDisable(false);
+                } else {
+                    save.setDisable(true);
+                }
+            }
+        });
+
+        price.setOnKeyReleased((listener) -> {
+            if (current != null) {
+                if (!price.getText().equals(Double.toString(current.getPrice()))) {
+                    save.setDisable(false);
+                } else {
+                    save.setDisable(true);
+                }
+            }
+        });
+
+        amount.setOnKeyReleased((listener) -> {
+            if (current != null) {
+                if (!amount.getText().equals(Integer.toString(current.getAmount()))) {
+                    save.setDisable(false);
+                } else {
+                    save.setDisable(true);
+                }
+            }
+        });
+
+        description.setOnKeyReleased((listener) -> {
+            if (current != null) {
+                if (!description.getText().equals(current.getDescription())) {
+                    save.setDisable(false);
+                } else {
+                    save.setDisable(true);
+                }
+            }
+        });
+        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(100);
+        imagePanel.getChildren().addAll(createImageOptionButton(layout), imageView);
+    }
+
+    private JACPOptionButton createImageOptionButton(final FXComponentLayout layout) {
+        JACPOptionButton options = new JACPOptionButton("Product Image", layout);
+        Button imageButton1 = new Button("", new ImageView(new Image("/images/products/box1.png")));
+        imageButton1.setOnMousePressed((event) -> {
+            if (current != null) {
+                current.setImageURL("box1.png");
+                imageView.setImage(new Image("/images/products/box1.png"));
+                save.setDisable(false);
+            }
+        });
+        Button imageButton2 = new Button("", new ImageView(new Image("/images/products/box2.png")));
+        imageButton2.setOnMousePressed((event) -> {
+            if (current != null) {
+                current.setImageURL("box2.png");
+                imageView.setImage(new Image("/images/products/box2.png"));
+                save.setDisable(false);
+            }
+        });
+        Button imageButton3 = new Button("", new ImageView(new Image("/images/products/box3.png")));
+        imageButton3.setOnMousePressed((event) -> {
+            if (current != null) {
+                current.setImageURL("box2.png");
+                imageView.setImage(new Image("/images/products/box2.png"));
+                save.setDisable(false);
+            }
+        });
+        Button imageButton4 = new Button("", new ImageView(new Image("/images/products/dog.png")));
+        imageButton4.setOnMousePressed((event) -> {
+            if (current != null) {
+                current.setImageURL("dog.png");
+                imageView.setImage(new Image("/images/products/dog.png"));
+                save.setDisable(false);
+            }
+        });
+        options.addOptions(imageButton1, imageButton2, imageButton3,imageButton4);
+        options.setAlignment(Pos.BOTTOM_LEFT);
+        return options;
+    }
+
+    private Product save(Product p) {
+        p.setName(name.getText());
+        p.setAmount(Integer.valueOf(amount.getText()));
+        p.setDescription(description.getText());
+        p.setPrice(Double.valueOf(price.getText()));
+
+        return p;
     }
 
     @PreDestroy

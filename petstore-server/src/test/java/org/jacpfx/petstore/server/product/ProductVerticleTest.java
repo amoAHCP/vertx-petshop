@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -250,7 +251,6 @@ public class ProductVerticleTest {
 
 
                 System.out.println("client data handler 5:" + data);
-                Type collectionType = new TypeToken<List<Product>>(){}.getType();
                 String json =  data.getString(0, data.length());
                 assertNotNull(json);
 
@@ -277,19 +277,20 @@ public class ProductVerticleTest {
 
         }, "/updateAll");
         outerUpdate.await();
+        int size = productList.size();
         // send product
-        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(ProductListDTO.State.UPDATE,Arrays.asList(new Product(100L,"KatzeGrau","box1.png",10,1,"kaum Fell"),new Product(101L,"HundWeiss","box2.png",10,1,"Sonderling"))))));
+        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(ProductListDTO.State.UPDATE,new HashSet<Product>(Arrays.asList(new Product(100L,"KatzeGrau","box1.png",10,1,"kaum Fell"),new Product(101L,"HundWeiss","box2.png",10,1,"Sonderling")))))));
         inner[0].await();
         assertFalse(productList.isEmpty());
-        assertTrue(9==productList.size());
+        assertTrue(size+2==productList.size());
 
         inner[0] = new CountDownLatch(1);
         // send product
-        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(ProductListDTO.State.UPDATE,Arrays.asList(new Product(103L,"Irgendeintier","box1.png",10,2,"noch nie gesehen"),new Product(100L,"KatzeGrau","box2.png",10,10,"frisst viel"),new Product(101L,"HundWeiss","box3.png",10,3,"schon wieder"))))));
+        wsSendTemp[0].write(new Buffer(Serializer.serialize(new ProductListDTO(ProductListDTO.State.UPDATE,new HashSet<Product>(Arrays.asList(new Product(103L,"Irgendeintier","box1.png",10,2,"noch nie gesehen"),new Product(100L,"KatzeGrau","box2.png",10,10,"frisst viel"),new Product(101L,"HundWeiss","box3.png",10,3,"schon wieder")))))));
 
         inner[0].await();
         assertFalse(productList.isEmpty());
-        assertTrue(9==productList.size());
+        assertTrue(size+5==productList.size());
         client.close();
     }
 }

@@ -12,8 +12,8 @@ import org.vertx.java.platform.Verticle;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Andy Moncsek on 25.02.14.
@@ -21,16 +21,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ProductVerticle extends Verticle {
     private WebSocketRepository repository = new WebSocketRepository();
 
-    public static Integer PORT_NUMBER = 8080;
+    public static Integer PORT_NUMER = 8080;
 
-    private List<Product> all = new CopyOnWriteArrayList<>(
-            Arrays.asList(new Product("Katze","box1.png",200d,10,"eine Katze"),
-                    new Product("Hund","box2.png",200d,20,"alter Hund"),
-                    new Product("Pferd","box3.png",2000d,2,"sehr altes Pferd"),
-                    new Product("Koala","dog.png",1000d,1,"nicht zum essen"),
-                    new Product("Tieger","box1.png",5000d,2,"ziemlich gross"),
-                    new Product("Giraffe","box2.png",2000d,3,"die grossen"),
-                    new Product("Igel","box3.png",100d,10,"vorsicht stachelig"))
+    private Set<Product> all = new HashSet<>(
+            Arrays.asList(new Product(1L, "Katze", "box1.png", 200d, 10, "eine Katze"),
+                    new Product(2L, "Hund", "box2.png", 200d, 20, "alter Hund"),
+                    new Product(3L, "Pferd", "box3.png", 2000d, 2, "sehr altes Pferd"),
+                    new Product(4L, "Koala", "dog.png", 1000d, 1, "nicht zum essen"),
+                    new Product(5L, "Tieger", "box1.png", 5000d, 2, "ziemlich gross"),
+                    new Product(6L, "Giraffe", "box2.png", 2000d, 3, "die grossen"),
+                    new Product(7L, "Igel", "box3.png", 100d, 10, "vorsicht stachelig"))
     );
     private Gson parser = new Gson();
 
@@ -40,9 +40,9 @@ public class ProductVerticle extends Verticle {
         registerEventBusMessageHandlerAddAll();
         registerEventBusMessageHandlerAdd();
         registerWebsocketHandler(httpServer);
-        httpServer.listen(PORT_NUMBER);
+        httpServer.listen(PORT_NUMER);
 
-        container.deployVerticle("org.jacpfx.petstore.server.webserver.WebServerVerticle",10);
+        container.deployVerticle("org.jacpfx.petstore.server.webserver.WebServerVerticle", 10);
     }
 
     private HttpServer startServer() {
@@ -70,12 +70,14 @@ public class ProductVerticle extends Verticle {
 
         try {
             final ProductListDTO dto = MessageUtil.getMessage(message.body(), ProductListDTO.class);
-            all = new CopyOnWriteArrayList<>(dto.getProducts());
-        } catch (IOException | ClassNotFoundException e) {
+            all = new HashSet<>(dto.getProducts());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        return parser.toJson(new ProductListDTO(ProductListDTO.State.ALL,all));
+        return parser.toJson(new ProductListDTO(ProductListDTO.State.ALL, all));
     }
 
     private void registerEventBusMessageHandlerAdd() {
@@ -98,15 +100,15 @@ public class ProductVerticle extends Verticle {
         Product product = null;
         try {
             product = MessageUtil.getMessage(message.body(), Product.class);
+            if (all.contains(product)) all.remove(product);
             all.add(product);
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return parser.toJson(new ProductListDTO(ProductListDTO.State.UPDATE,Arrays.asList(product)));
+        return parser.toJson(new ProductListDTO(ProductListDTO.State.UPDATE, new HashSet<Product>(Arrays.asList(product))));
     }
-
-
-
 
 
     /**
@@ -121,10 +123,10 @@ public class ProductVerticle extends Verticle {
                 case "/all":
                     repository.addWebSocket(serverSocket);
                     // reply to first contact
-                    serverSocket.writeTextFrame(parser.toJson(new ProductListDTO(ProductListDTO.State.ALL,all)));
+                    serverSocket.writeTextFrame(parser.toJson(new ProductListDTO(ProductListDTO.State.ALL, all)));
                     // add handler for further calls
                     serverSocket.dataHandler(data -> {
-                        serverSocket.writeTextFrame(parser.toJson(new ProductListDTO(ProductListDTO.State.ALL,all)));
+                        serverSocket.writeTextFrame(parser.toJson(new ProductListDTO(ProductListDTO.State.ALL, all)));
                     });
                     break;
                 case "/update":

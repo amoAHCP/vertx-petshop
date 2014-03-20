@@ -12,7 +12,7 @@
     <children>
 
         <Pane maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-        <VBox alignment="CENTER_LEFT" maxWidth="Infinity" prefWidth="500.0"  HBox.hgrow="ALWAYS">
+        <VBox alignment="CENTER_LEFT" maxWidth="Infinity" prefWidth="400.0"  HBox.hgrow="ALWAYS">
             <children>
                 <HBox alignment="CENTER_LEFT">
                     <children>
@@ -68,21 +68,13 @@
                 </HBox>
             </children>
         </VBox>
-        <Pane maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-        <VBox alignment="CENTER_RIGHT">
+
+        <VBox fx:id="imagePanel" prefWidth="200" alignment="CENTER_RIGHT" >
             <children>
-                <ComboBox xmlns:fx="http://javafx.com/fxml">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Item 1"/>
-                            <String fx:value="Item 2"/>
-                            <String fx:value="Item 3"/>
-                        </FXCollections>
-                    </items>
-                </ComboBox>
-                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true"/>
+
             </children>
         </VBox>
+        <Pane maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
     </children>
 
 </HBox>

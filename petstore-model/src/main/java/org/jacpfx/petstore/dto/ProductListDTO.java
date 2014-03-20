@@ -4,21 +4,22 @@ import org.jacpfx.petstore.model.Product;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Andy Moncsek on 27.02.14.
  */
 public class ProductListDTO implements Serializable {
 
-    private final List<Product> products;
+    private final Set<Product> products;
     private final State state;
 
-    public ProductListDTO(final State state,final List<Product> products) {
+    public ProductListDTO(final State state,final Set<Product> products) {
         this.state = state;
         this.products = products;
     }
 
-    public List<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
