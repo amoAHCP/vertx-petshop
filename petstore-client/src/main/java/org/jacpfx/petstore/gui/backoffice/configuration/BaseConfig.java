@@ -14,16 +14,20 @@ public class BaseConfig {
     public static final String WORKBENCH_ID = "w01";
     // ***** PERSPECTIVES *****
     public static final String PETSTORE_PERSPECTIVE_ID = "p01";
+    public static final String ORDER_PERSPECTIVE_ID = "p02";
     // ***** COMPONENTS *****
     public static final String PRODUCT_DETAIL_COMPONENT_ID = "c01";
     public static final String PRODUCT_COMPONENT_ID = "c02";
     public static final String WSPRODUCT_COMPONENT_ID = "c03";
+    public static final String ORDER_COMPONENT_ID = "c04";
 
     // ***** FRAGMENTS *****
     public static final String ORDER_BOX_FRAGMENT = "d01";
     // ***** TARGETS *****
     public static final String TARGET_CUSTOMER_COMPONENT_ID = "customerComponent";
     public static final String TARGET_PRODUCT_COMPONENT_ID = "productComponent";
+    public static final String TARGET_ORDER_DETAIL_COMPONENT_ID = "detailComponent";
+    public static final String TARGET_ORDER_COMPONENT_ID = "orderComponent";
 
     public static String getGlobalId(final String perspectiveId, final String componentId) {
         return perspectiveId.concat(".").concat(componentId);

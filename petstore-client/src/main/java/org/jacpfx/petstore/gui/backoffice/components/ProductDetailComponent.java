@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.component.DeclarativeView;
@@ -35,7 +37,7 @@ import java.util.logging.Logger;
         active = true,
         resourceBundleLocation = "bundles.languageBundle",
         initialTargetLayoutId = BaseConfig.TARGET_CUSTOMER_COMPONENT_ID,
-        viewLocation = "/fxml/OrderDetail.fxml")
+        viewLocation = "/fxml/ProductDetail.fxml")
 public class ProductDetailComponent implements FXComponent {
 
     private static final Logger LOGGER = Logger.getLogger(ProductDetailComponent.class.getName());
@@ -163,7 +165,9 @@ public class ProductDetailComponent implements FXComponent {
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
-        imagePanel.getChildren().addAll(createImageOptionButton(layout), imageView);
+        final Pane seperator = new Pane();
+        VBox.setVgrow(seperator, Priority.ALWAYS);
+        imagePanel.getChildren().addAll(createImageOptionButton(layout), seperator,imageView);
     }
 
     private JACPOptionButton createImageOptionButton(final FXComponentLayout layout) {
@@ -187,8 +191,8 @@ public class ProductDetailComponent implements FXComponent {
         Button imageButton3 = new Button("", new ImageView(new Image("/images/products/box3.png")));
         imageButton3.setOnMousePressed((event) -> {
             if (current != null) {
-                current.setImageURL("box2.png");
-                imageView.setImage(new Image("/images/products/box2.png"));
+                current.setImageURL("box3.png");
+                imageView.setImage(new Image("/images/products/box3.png"));
                 save.setDisable(false);
             }
         });
