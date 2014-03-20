@@ -2,10 +2,7 @@ package org.jacpfx.petstore.server.order;
 
 import com.google.gson.Gson;
 import org.jacpfx.petstore.dto.OrderListDTO;
-import org.jacpfx.petstore.model.Address;
-import org.jacpfx.petstore.model.Customer;
-import org.jacpfx.petstore.model.Order;
-import org.jacpfx.petstore.model.Product;
+import org.jacpfx.petstore.model.*;
 import org.jacpfx.petstore.util.MessageUtil;
 import org.jacpfx.petstore.util.Serializer;
 import org.junit.BeforeClass;
@@ -37,12 +34,12 @@ import static org.junit.Assert.*;
 public class OrderVerticleTest {
     static final PlatformManager pm = PlatformLocator.factory.createPlatformManager();
     private Gson parser = new Gson();
+
     @BeforeClass
     public static void onStart() throws MalformedURLException, InterruptedException {
         // if server was started manually, uncomment this:
         connect(1);
     }
-
 
 
     private static PlatformManager connect(int instances) throws MalformedURLException, InterruptedException {
@@ -108,17 +105,16 @@ public class OrderVerticleTest {
         }, "/updateOrder");
 
 
-
         outer.await();
 
-        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(1,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D,2,"s"))))));
-        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(2,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D,3,"a"))))));
-        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(3,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D,2,""))))));
-        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(4,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D,1,"cdv"))))));
+        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(1, new Customer("a", "b", "aa@gmx.ch", new Address("1", "2", "3", "CH")), new Basket(Arrays.asList(new BasketItem(new Product(4L, "pet", "", 5D, 2, "s"), 3)))))));
+        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(2, new Customer("a", "b", "aa@gmx.ch", new Address("1", "2", "3", "CH")), new Basket(Arrays.asList(new BasketItem(new Product(4L, "pet", "", 5D, 2, "qs"), 1)))))));
+        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(3, new Customer("a", "b", "aa@gmx.ch", new Address("1", "2", "3", "CH")), new Basket(Arrays.asList(new BasketItem(new Product(4L, "pet", "", 5D, 2, "r"), 4)))))));
+        wsUpdateTemp[0].writeBinaryFrame(new Buffer(Serializer.serialize(new Order(4, new Customer("a", "b", "aa@gmx.ch", new Address("1", "2", "3", "CH")), new Basket(Arrays.asList(new BasketItem(new Product(4L, "pet", "", 5D, 2, "asdf"), 2)))))));
 
         inner.await();
         assertFalse(allOrders.isEmpty());
-        assertTrue(allOrders.size()==1);
+        assertTrue(allOrders.size() == 1);
     }
 
     @Test
@@ -140,7 +136,7 @@ public class OrderVerticleTest {
 
         }, "/placeOrder");
         outer.await();
-         Order order = new Order(1,new Customer("a","b","aa@gmx.ch",new Address("1","2","3","CH")), Arrays.asList(new Product(4L,"pet","",5D,2,"")));
+        Order order = new Order(1, new Customer("a", "b", "aa@gmx.ch", new Address("1", "2", "3", "CH")),new Basket(Arrays.asList(new BasketItem(new Product(4L, "pet", "", 5D, 2, "asdf"), 2))));
 
         String orderJson = parser.toJson(order);
         wsUpdateTemp[0].writeTextFrame(orderJson);

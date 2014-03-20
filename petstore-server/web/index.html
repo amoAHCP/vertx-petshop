@@ -65,29 +65,48 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="col-sm-6 col-md-4" ng-repeat="item in pets track by $index">
+                <div class="col-sm-2 col-md-8" ng-repeat="item in pets track by $index">
                     <div class="thumbnail">
-                        <img data-src="{{item.imageURL}}" alt="{{item.name}}">
+                        <div class="left-floater product-image">
+                            <img data-src="{{item.imageURL}}" alt="{{item.name}}">
+                        </div>
+                        <div class="left-floater">
+                            <h4>{{item.name}}</h4>
 
-                        <div class="caption">
-                            <h3>{{item.name}}</h3>
+                            <p>{{item.description}}</p>
 
                             <p>CHF {{item.price}}</p>
-
+                        </div>
+                        <div class="right-floater product-button">
                             <p>
-                                <button type="button" ng-click="addToBasket(item)">add</button>
+                                <button type="button" ng-disabled="item.amount == 0" ng-click="addToBasket(item)">add
+                                </button>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="col-sm-6 col-md-4">
-                    <ul>
-                        <li ng-repeat="item in order.products track by $index">
-                            {{item.name}} - {{item.price}}
-                        </li>
-                    </ul>
+                <div class="col-sm-2 col-md-8" ng-repeat="item in order.basket.basketItems track by $index">
+                    <div class="thumbnail">
+                        <div class="left-floater product-image">
+                            <img data-src="{{item.imageURL}}" alt="{{item.name}}">
+                        </div>
+                        <div class="left-floater">
+                            <h4>{{item.product.name}}</h4>
+
+                            <p>{{item.amount}}</p>
+
+                            <p>CHF {{item.product.price}}</p>
+                        </div>
+                        <div class="right-floater product-button">
+                            <p>
+                                <button type="button" ng-click="removeOneFromBasket(item)"> -1</button>
+                                <button type="button" ng-click="removeFromBasket(item)"> x</button>
+                                <button type="button" ng-click="addOneToBasket(item)"> +1</button>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -142,6 +161,19 @@
             </div>
         </div>
     </form>
+
+    <div class="modal fade" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Pleas wait...</h4>
+                </div>
+                <div class="modal-body">
+                    Order processing, please wait....
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!--FOOTER-->

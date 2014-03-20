@@ -11,7 +11,6 @@ import java.util.UUID;
 public class Order implements Serializable {
     private Basket basket;
     private Long id;
-    private List<Product> products;
     private Customer customer;
     private double amount;
 
@@ -19,7 +18,7 @@ public class Order implements Serializable {
 
     }
 
-    public Order(final double amount, final Customer customer, final List<Product> products) {
+    public Order(final double amount, final Customer customer, final Basket basket) {
         this.id = UUID.randomUUID().getMostSignificantBits();
         this.amount = amount;
         this.customer = customer;
@@ -53,7 +52,7 @@ public class Order implements Serializable {
         if (Double.compare(order.amount, amount) != 0) return false;
         if (customer != null ? !customer.equals(order.customer) : order.customer != null) return false;
         if (!id.equals(order.id)) return false;
-        if (products != null ? !products.equals(order.products) : order.products != null) return false;
+        if (basket != null ? !basket.equals(order.basket) : order.basket != null) return false;
 
         return true;
     }
@@ -66,9 +65,8 @@ public class Order implements Serializable {
     @Override
     public String toString() {
         return "Order{" +
-                "basket=" + basket +
                 "id=" + id +
-                ", products=" + products +
+                ", basket=" + basket +
                 ", customer=" + customer +
                 ", amount=" + amount +
                 '}';

@@ -6,3 +6,28 @@
     float: left;
     margin: 20px;
 }
+
+.left-floater {
+    float: left;
+    margin-left: 20px;
+}
+
+.right-floater {
+    float: right;
+    margin-right: 20px;
+}
+
+.thumbnail {
+    height: 110px;
+}
+
+.product-button {
+    margin-top: 69px;
+}
+
+.product-image {
+    width: 90px;
+    height: 90px;
+    margin: 5px;
+    border: 1px solid gray;
+}

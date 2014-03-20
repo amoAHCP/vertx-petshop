@@ -51,7 +51,7 @@ public class OrderVerticle extends Verticle {
     private void handleWSPlaceOrderMessagesFromBus(final Message<byte[]> message) {
         try {
             final OrderProcessingDTO orderProcessing = MessageUtil.getMessage(message.body(), OrderProcessingDTO.class);
-            addOrderAndBroadCast(orderProcessing.getOrder());
+            this.addOrderAndBroadCast(orderProcessing.getOrder());
             final Optional<ServerWebSocket> result = shopRepository.getWebSockets().
                     parallelStream().
                     filter(socket -> socket.textHandlerID().equals(orderProcessing.getWsTextFrameID())
