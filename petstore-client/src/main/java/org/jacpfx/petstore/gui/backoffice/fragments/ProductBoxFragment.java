@@ -18,11 +18,11 @@ import org.jacpfx.rcp.context.Context;
  * Created by amo on 18.03.14.
  */
 @Fragment(id = BaseConfig.ORDER_BOX_FRAGMENT,
-        viewLocation = "/fxml/Order.fxml",
+        viewLocation = "/fxml/Product.fxml",
         resourceBundleLocation = "bundles.languageBundle",
         localeID = "en_US",
         scope = Scope.PROTOTYPE)
-public class OrderBoxFragment {
+public class ProductBoxFragment {
     @Resource
     private Context context;
 

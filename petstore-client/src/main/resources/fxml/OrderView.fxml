@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<VBox fx:id="rootPane" prefWidth="600.0" style="-fx-background-color: #bcbcbc;" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+
+        <HBox maxWidth="Infinity" prefHeight="50.0">
+            <children>
+                <Label text="Order amount:">
+                    <padding>
+                        <Insets left="5.0"/>
+                    </padding>
+                </Label>
+                <Label fx:id="amountLabel" text="Label">
+                    <padding>
+                        <Insets left="10.0"/>
+                    </padding>
+                </Label>
+            </children>
+            <padding>
+                <Insets top="10.0"/>
+            </padding>
+        </HBox>
+        <TilePane fx:id="orderPane" prefWidth="200.0" style="-fx-background-color: #e1e1e1" VBox.vgrow="ALWAYS"/>
+    </children>
+
+
+</VBox>

@@ -11,7 +11,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.TilePane;
 import org.jacpfx.api.annotations.Resource;
-import org.jacpfx.api.annotations.component.View;
+import org.jacpfx.api.annotations.component.DeclarativeView;
 import org.jacpfx.api.annotations.lifecycle.PostConstruct;
 import org.jacpfx.api.annotations.lifecycle.PreDestroy;
 import org.jacpfx.api.message.Message;
@@ -37,18 +37,22 @@ import java.util.stream.Collectors;
  * To change this template use File | Settings | File Templates.
  */
 
-@View(id = BaseConfig.PRODUCT_COMPONENT_ID, name = "SimpleView", active = true, resourceBundleLocation = "bundles.languageBundle", initialTargetLayoutId = BaseConfig.TARGET_PRODUCT_COMPONENT_ID)
-public class ProductComponent implements FXComponent {
+@DeclarativeView(id = BaseConfig.ORDER_COMPONENT_ID, name = "SimpleView",
+        active = true,
+        resourceBundleLocation = "bundles.languageBundle",
+        initialTargetLayoutId = BaseConfig.TARGET_ORDER_COMPONENT_ID,
+        viewLocation = "/fxml/OrderView.fxml")
+public class OrderComponent implements FXComponent {
 
 
-    private static final Logger LOGGER = Logger.getLogger(ProductComponent.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(OrderComponent.class.getName());
 
     @Resource
     private Context context;
 
     private BorderPane mainPane;
 
-    TilePane tile = new TilePane(Orientation.HORIZONTAL);
+    private TilePane tile = new TilePane(Orientation.HORIZONTAL);
 
     private ObservableList<Node> products = FXCollections.emptyObservableList();
     private List<ManagedFragmentHandler<ProductBoxFragment>> fragmentList = new CopyOnWriteArrayList<>();
@@ -97,7 +101,7 @@ public class ProductComponent implements FXComponent {
             }
 
         }
-        return this.mainPane;
+        return null;
     }
 
     private void addOrReplaceProduct() {
