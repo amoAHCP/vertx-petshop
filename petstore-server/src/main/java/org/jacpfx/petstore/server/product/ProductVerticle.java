@@ -43,6 +43,7 @@ public class ProductVerticle extends Verticle {
         httpServer.listen(PORT_NUMER);
 
         container.deployVerticle("org.jacpfx.petstore.server.webserver.WebServerVerticle", 10);
+        container.deployVerticle("org.jacpfx.petstore.server.order.OrderVerticle", 10);
     }
 
     private HttpServer startServer() {

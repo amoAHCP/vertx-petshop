@@ -28,6 +28,7 @@ public class OrderVerticle extends Verticle {
     private Set<Order> all = new HashSet<>();
 
     public static Integer PORT_NUMBER = 9090;
+    public static Integer ORDER_NUMBER = 1;
     private Gson parser = new Gson();
 
     @Override
@@ -56,7 +57,7 @@ public class OrderVerticle extends Verticle {
                     parallelStream().
                     filter(socket -> socket.textHandlerID().equals(orderProcessing.getWsTextFrameID())
                     ).findFirst();
-            if (result.isPresent()) result.get().writeTextFrame("OK");
+            if (result.isPresent()) result.get().writeTextFrame(String.format("2014-%04d", (ORDER_NUMBER++)));
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

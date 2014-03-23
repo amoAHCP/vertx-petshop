@@ -14,7 +14,8 @@
 
 .right-floater {
     float: right;
-    margin-right: 20px;
+    margin-right: 8px;
+    margin-top: 7px;
 }
 
 .thumbnail {
@@ -25,9 +26,30 @@
     margin-top: 69px;
 }
 
+.no-margins{
+    margin: 0px;
+}
+
 .product-image {
     width: 90px;
     height: 90px;
     margin: 5px;
     border: 1px solid gray;
+}
+
+.petstore-product {
+    width: 170px;
+    height: 100px;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 10px 0px;
+}
+
+.basket-item {
+    height: 55px;
+}
+
+.basket-item-text {
+    line-height: 40px;
 }

@@ -23,6 +23,8 @@ var ItemListController = function ($scope) {
         amount: 0
     }
 
+    $scope.orderId = "";
+
     var itemWS = new WebSocket("ws://localhost:8080/all");
     var orderWS = new WebSocket("ws://localhost:9090/placeOrder");
 
@@ -37,7 +39,9 @@ var ItemListController = function ($scope) {
 
     orderWS.onmessage = function (msg) {
         console.log(msg);
-        $('#waitModal').modal('hide');
+        $scope.toggleDialog('#waitModal', false);
+        $scope.orderId = msg.data;
+        $scope.$apply();
     }
 
 
@@ -46,6 +50,13 @@ var ItemListController = function ($scope) {
             var container = JSON.parse(msg.data);
             if (container.state == "UPDATE") {
                 container.products.forEach(function (element) {
+                    $scope.pets.forEach(function (pet) {
+                        if (pet.id == element.id) {
+                            // altes Element löschen
+                            $scope.pets.splice($scope.pets.indexOf(pet), 1);
+                        }
+                    });
+                    // neues Element hinzufügen
                     $scope.pets.push(element);
                 });
             } else {
@@ -53,6 +64,14 @@ var ItemListController = function ($scope) {
             }
         });
     }
+
+
+    $scope.addToBasketAndClose = function (item) {
+        $scope.addToBasket(item);
+        $scope.hideDetails(item);
+
+    }
+
     // adding some items to the basket
     $scope.addToBasket = function (item) {
         var found = false;
@@ -69,6 +88,9 @@ var ItemListController = function ($scope) {
             item.amount -= 1;
         }
 
+    }
+    $scope.newOrder = function () {
+        location.reload();
     }
     // remove from Basket ;)
     $scope.removeOneFromBasket = function (basketItem) {
@@ -107,9 +129,38 @@ var ItemListController = function ($scope) {
 
 
     $scope.placeOrder = function () {
+        $scope.toggleDialog('#customerModal', false);
         orderWS.send(JSON.stringify($scope.order));
-        $('#waitModal').modal('show');
+        $scope.toggleDialog('#waitModal', true);
     }
+
+    $scope.showCheckout = function () {
+        $scope.toggleDialog('#customerModal', true);
+    }
+
+    $scope.showDetails = function (item) {
+        $scope.toggleDialog('#' + item.id, true);
+    }
+
+    $scope.hideDetails = function (item) {
+        $scope.toggleDialog('#' + item.id, false);
+    }
+
+    $scope.toggleDialog = function (dialogId, show) {
+        $(dialogId).modal(show ? 'show' : 'hide');
+    }
+
+    $scope.total = function () {
+        var amount = 0;
+        $scope.order.basket.basketItems.forEach(function (item) {
+            amount += item.amount * item.product.price;
+        });
+
+        $scope.amount = amount;
+        return $scope.amount;
+    }
+
+    //    OBJECTS
 
     function BasketItem(product) {
         this.product = product;

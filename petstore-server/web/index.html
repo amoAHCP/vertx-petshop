@@ -51,21 +51,162 @@
         </div>
     </div>
 </div>
-<div class="container">
-    <form name="loginForm" novalidate ng-submit="placeOrder()">
-        <div class="page-header" id="banner">
-            <div class="row">
-                <div class="col-lg-6">
-                    <h1>Petstore</h1>
+<div class="container order-container">
+<form name="loginForm" novalidate ng-submit="placeOrder()" ng-hide="orderId">
+    <div class="page-header" id="banner">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1>Petstore</h1>
 
-                    <p class="lead">Choose a Pet</p>
+                <p class="lead">Choose a Pet</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="col-sm-4 col-md-4" ng-repeat="item in pets track by $index">
+                <div class="petstore-product">
+                    <h4>{{item.name}}</h4>
+
+                    <p>{{item.price | currency:"CHF "}}</p>
+
+                    <div class="bs-component" style="margin-bottom: 15px;">
+                        <div class="btn-group btn-group-justified">
+                            <a href="" class="btn btn-sm" ng-click="showDetails(item)">details</a>
+                            <a href="" class="btn btn-sm" ng-disabled="item.amount == 0" ng-click="addToBasket(item)">add</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- BASKET -->
+        <div class="col-lg-6">
+            <div class="col-sm-2 col-md-12" ng-repeat="item in order.basket.basketItems track by $index">
+                <div class="thumbnail basket-item">
+                    <div class="left-floater basket-item-text">
+                        <h4>{{item.product.name}}</h4>
+                    </div>
+                    <div class="left-floater basket-item-text">
+                        <p>{{item.amount}}</p>
+                    </div>
+                    <div class="left-floater basket-item-text">
+                        <p>{{item.product.price | currency:"CHF "}}</p>
+                    </div>
+                    <div class="left-floater basket-item-text">
+                        <p>{{(item.product.price * item.amount) | currency:"CHF "}}</p>
+                    </div>
+                    <div class="right-floater">
+                        <div class="btn-group">
 
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="col-sm-2 col-md-8" ng-repeat="item in pets track by $index">
+                            <button type="button" class="btn btn-sm" ng-click="removeOneFromBasket(item)"> -1</button>
+                            <button type="button" class="btn btn-sm" ng-click="removeFromBasket(item)"> x</button>
+
+                            <button type="button" class="btn btn-sm" ng-disabled="item.amount == 0"
+                                    ng-click="addOneToBasket(item)"> +1
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="col-sm-2 col-md-12">
+                <div class="right-floater no-margins">
+                    <h4>{{total() | currency:"CHF "}}</h4>
+                    <button type="button" class="btn btn-sm right-floater no-margins" ng-click="showCheckout()"
+                            ng-disabled="!order.basket.basketItems.length">
+                        checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="customerModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h4 class="modal-title" id="customerModalLabel">Enter your Data</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- CUSTOMER FORM -->
+                            <!-- FIRSTNAME -->
+                            <div class="form-group"
+                                 ng-class="{'has-error': order.customer.firstname.$invalid}">
+                                <input class="form-control" name="firstname" type="text"
+                                       placeholder="Firstname" required ng-model="order.customer.firstname"/>
+                                <span class="help-block"
+                                      ng-show="order.customer.firstname.$error.required">Required</span>
+                            </div>
+                            <!-- LASTNAME -->
+                            <div class="form-group" ng-class="{'has-error': order.customer.lastname.$invalid}">
+                                <input class="form-control" name="firstname" type="text"
+                                       placeholder="Lastname" required ng-model="order.customer.lastname"/>
+                                <span class="help-block"
+                                      ng-show="order.customer.lastname.$error.required">Required</span>
+                            </div>
+                            <!-- ADDRESS -->
+                            <div class="form-group"
+                                 ng-class="{'has-error': order.customer.homeAddress.street1.$invalid}">
+                                <input class="form-control" name="firstname" type="text"
+                                       placeholder="Street" required ng-model="order.customer.homeAddress.street1"/>
+                    <span class="help-block"
+                          ng-show="order.customer.homeAddress.street1.$error.required">Required</span>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'has-error': order.customer.homeAddress.zipcode.$invalid}">
+                                <input class="form-control" name="firstname" type="text"
+                                       placeholder="Zip" required maxlength="4"
+                                       ng-model="order.customer.homeAddress.zipcode"/>
+                    <span class="help-block"
+                          ng-show="order.customer.homeAddress.zipcode.$error.required">Required</span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error': order.customer.homeAddress.city.$invalid}">
+                                <input class="form-control" name="firstname" type="text"
+                                       placeholder="City" required ng-model="order.customer.homeAddress.city"/>
+                                <span class="help-block" ng-show="order.customer.homeAddress.city.$error.required">Required</span>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'has-error': order.customer.homeAddress.country.$invalid}">
+                                <input class="form-control" name="firstname" type="text"
+                                       placeholder="Country" required ng-model="order.customer.homeAddress.country"/>
+                    <span class="help-block"
+                          ng-show="order.customer.homeAddress.country.$error.required">Required</span>
+                            </div>
+
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary pull-right"
+                                        value="Login" title="Login"
+                                        ng-disabled="!loginForm.$valid">
+                                    <span>placeOrder</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- PRODUCT DETAILS -->
+<div ng-repeat="item in pets track by $index">
+    <div class="modal fade" id="{{item.id}}" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h4 class="modal-title">Product Details</h4>
+                </div>
+                <div class="modal-body">
                     <div class="thumbnail">
                         <div class="left-floater product-image">
                             <img data-src="{{item.imageURL}}" alt="{{item.name}}">
@@ -75,129 +216,72 @@
 
                             <p>{{item.description}}</p>
 
-                            <p>CHF {{item.price}}</p>
+                            <p>{{item.price | currency:"CHF "}}</p>
                         </div>
                         <div class="right-floater product-button">
                             <p>
-                                <button type="button" ng-disabled="item.amount == 0" ng-click="addToBasket(item)">add
+                                <button type="button" data-dismiss="modal">close</button>
+                                <button type="button" ng-disabled="item.amount == 0"
+                                        ng-click="addToBasketAndClose(item)">
+                                    add
                                 </button>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="col-sm-2 col-md-8" ng-repeat="item in order.basket.basketItems track by $index">
-                    <div class="thumbnail">
-                        <div class="left-floater product-image">
-                            <img data-src="{{item.imageURL}}" alt="{{item.name}}">
-                        </div>
-                        <div class="left-floater">
-                            <h4>{{item.product.name}}</h4>
-
-                            <p>{{item.amount}}</p>
-
-                            <p>CHF {{item.product.price}}</p>
-                        </div>
-                        <div class="right-floater product-button">
-                            <p>
-                                <button type="button" ng-click="removeOneFromBasket(item)"> -1</button>
-                                <button type="button" ng-click="removeFromBasket(item)"> x</button>
-                                <button type="button" ng-click="addOneToBasket(item)"> +1</button>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-
-                <!-- FIRSTNAME -->
-                <div class="form-group"
-                     ng-class="{'has-error': order.customer.firstname.$invalid}">
-                    <input class="form-control" name="firstname" type="text"
-                           placeholder="Firstname" required ng-model="order.customer.firstname"/>
-                    <span class="help-block" ng-show="order.customer.firstname.$error.required">Required</span>
-                </div>
-                <!-- LASTNAME -->
-                <div class="form-group" ng-class="{'has-error': order.customer.lastname.$invalid}">
-                    <input class="form-control" name="firstname" type="text"
-                           placeholder="Lastname" required ng-model="order.customer.lastname"/>
-                    <span class="help-block" ng-show="order.customer.lastname.$error.required">Required</span>
-                </div>
-                <!-- ADDRESS -->
-                <div class="form-group" ng-class="{'has-error': order.customer.homeAddress.street1.$invalid}">
-                    <input class="form-control" name="firstname" type="text"
-                           placeholder="Street" required ng-model="order.customer.homeAddress.street1"/>
-                    <span class="help-block"
-                          ng-show="order.customer.homeAddress.street1.$error.required">Required</span>
-                </div>
-                <div class="form-group" ng-class="{'has-error': order.customer.homeAddress.zipcode.$invalid}">
-                    <input class="form-control" name="firstname" type="text"
-                           placeholder="Zip" required maxlength="4" ng-model="order.customer.homeAddress.zipcode"/>
-                    <span class="help-block"
-                          ng-show="order.customer.homeAddress.zipcode.$error.required">Required</span>
-                </div>
-                <div class="form-group" ng-class="{'has-error': order.customer.homeAddress.city.$invalid}">
-                    <input class="form-control" name="firstname" type="text"
-                           placeholder="City" required ng-model="order.customer.homeAddress.city"/>
-                    <span class="help-block" ng-show="order.customer.homeAddress.city.$error.required">Required</span>
-                </div>
-                <div class="form-group" ng-class="{'has-error': order.customer.homeAddress.country.$invalid}">
-                    <input class="form-control" name="firstname" type="text"
-                           placeholder="Country" required ng-model="order.customer.homeAddress.country"/>
-                    <span class="help-block"
-                          ng-show="order.customer.homeAddress.country.$error.required">Required</span>
-                </div>
+    </div>
+</div>
 
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary pull-right"
-                            value="Login" title="Login" ng-disabled="!loginForm.$valid&&!order.basket.length">
-                        <span>placeOrder</span>
-                    </button>
-                </div>
+<div class="modal fade" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Pleas wait...</h4>
             </div>
-        </div>
-    </form>
-
-    <div class="modal fade" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Pleas wait...</h4>
-                </div>
-                <div class="modal-body">
-                    Order processing, please wait....
-                </div>
+            <div class="modal-body">
+                Order processing, please wait....
             </div>
         </div>
     </div>
+</div>
 
+<div class="container" ng-show="orderId">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="thank-you">
+                <h1>THANK YOU...</h1>
 
-    <!--FOOTER-->
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
-
-                <ul class="list-unstyled">
-                    <li class="pull-right"><a href="#top">Back to top</a></li>
-                    <li><a href="http://feeds.feedburner.com/bootswatch">JacpFX</a></li>
-                    <li><a href="https://twitter.com/thomashpark">bootstrap</a></li>
-                    <li><a href="https://github.com/thomaspark/bootswatch/">bootswatch</a></li>
-                    <li><a href="https://github.com/thomaspark/bootswatch/">angularJS</a></li>
-                    <li><a href="https://github.com/thomaspark/bootswatch/">vert.x</a></li>
-                </ul>
-                <p>Made by <a href="mailto:amo.ahcp@gmail.com">Andy Moncsek</a> and
-                    <a href="mailto:pete.ahcp@gmail.com">Patrick Symmangk</a>. </p>
-
-                <p>Current version made for Trivadis Techevent (03/2014).</p>
+                <p>Your order-id is: {{orderId}}</p>
+                <button type="button" class="btn" ng-click="newOrder()">new Order</button>
             </div>
         </div>
-    </footer>
+    </div>
+</div>
 
+<!--FOOTER-->
+<footer>
+    <div class="row">
+        <div class="col-lg-12">
 
+            <ul class="list-unstyled">
+                <li class="pull-right"><a href="#top">Back to top</a></li>
+                <li><a href="http://feeds.feedburner.com/bootswatch">JacpFX</a></li>
+                <li><a href="https://twitter.com/thomashpark">bootstrap</a></li>
+                <li><a href="https://github.com/thomaspark/bootswatch/">bootswatch</a></li>
+                <li><a href="https://github.com/thomaspark/bootswatch/">angularJS</a></li>
+                <li><a href="https://github.com/thomaspark/bootswatch/">vert.x</a></li>
+            </ul>
+            <p>Made by <a href="mailto:amo.ahcp@gmail.com">Andy Moncsek</a> and
+                <a href="mailto:pete.ahcp@gmail.com">Patrick Symmangk</a>. </p>
+
+            <p>Current version made for Trivadis Techevent (03/2014).</p>
+        </div>
+    </div>
+</footer>
 </div>
 
 
