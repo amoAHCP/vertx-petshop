@@ -121,7 +121,7 @@ public class ProductDetailComponent implements FXComponent {
             save.setDisable(true);
         });
 
-        toolbar.addAllOnEnd("ddd", save, create);
+        toolbar.addAllOnEnd("productDetail", save, create);
 
         name.setOnKeyReleased((listener) -> {
             if (current != null) {

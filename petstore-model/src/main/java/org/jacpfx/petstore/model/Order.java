@@ -42,6 +42,10 @@ public class Order implements Serializable {
         this.amount = amount;
     }
 
+    public Basket getBasket() {
+        return basket;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

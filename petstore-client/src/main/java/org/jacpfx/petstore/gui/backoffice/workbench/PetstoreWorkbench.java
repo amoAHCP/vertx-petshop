@@ -39,10 +39,13 @@ public class PetstoreWorkbench implements FXWorkbench {
         final Menu menuFile = new Menu("File");
         menuFile.getItems().addAll(this.createExitEntry());
         menu.getMenus().addAll(menuFile);
+        registerPerspectiveButtons(layout);
+    }
 
+    private void registerPerspectiveButtons(FXComponentLayout layout) {
         final JACPToolBar registeredToolBar = layout.getRegisteredToolBar(ToolbarPosition.NORTH);
-        Button productPerspective = new Button("Products");
-        Button orderPerspective = new Button("Orders");
+        final Button productPerspective = new Button("Products");
+        final Button orderPerspective = new Button("Orders");
         productPerspective.setOnMouseClicked((event)->{
             context.send(BaseConfig.PETSTORE_PERSPECTIVE_ID,"show");
         });
@@ -55,7 +58,7 @@ public class PetstoreWorkbench implements FXWorkbench {
     @Override
     public void handleInitialLayout(Message<Event, Object> action, WorkbenchLayout<Node> layout, Stage stage) {
         this.stage = stage;
-        layout.setWorkbenchXYSize(1024, 768);
+        layout.setWorkbenchXYSize(900, 850);
         layout.registerToolBars(ToolbarPosition.NORTH);
         layout.setMenuEnabled(true);
     }

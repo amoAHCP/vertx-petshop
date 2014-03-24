@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import org.jacpfx.api.annotations.Resource;
+import org.jacpfx.api.annotations.lifecycle.OnHide;
 import org.jacpfx.api.annotations.lifecycle.OnShow;
 import org.jacpfx.api.annotations.lifecycle.PostConstruct;
 import org.jacpfx.api.annotations.lifecycle.PreDestroy;
@@ -66,6 +67,14 @@ public class ProductPerspective implements FXPerspective {
 
     @OnShow
     public void onShow(final FXComponentLayout layout) {
+        final JACPToolBar registeredToolBar = layout.getRegisteredToolBar(ToolbarPosition.NORTH);
+        registeredToolBar.getNodes("productDetail").forEach(node->node.setVisible(true));
+    }
+
+    @OnHide
+    public void onHide(final FXComponentLayout layout) {
+        final JACPToolBar registeredToolBar = layout.getRegisteredToolBar(ToolbarPosition.NORTH);
+        registeredToolBar.getNodes("productDetail").forEach(node->node.setVisible(false));
 
     }
 
@@ -77,14 +86,6 @@ public class ProductPerspective implements FXPerspective {
      */
     public void onStartPerspective(final FXComponentLayout layout,
                                    final ResourceBundle resourceBundle) {
-        // TODO get message from resource
-        // define toolbars and menu entries
-        JACPToolBar toolbar = layout.getRegisteredToolBar(ToolbarPosition.NORTH);
-        Button pressMe = new Button("press me");
-        pressMe.setOnAction((event) -> {
-            context.showModalDialog(JACPDialogUtil.createOptionPane("Some Dialog", "This is a Dialog, OK?"));
-        });
-//       toolbar.add(pressMe);
     }
 
     @PreDestroy

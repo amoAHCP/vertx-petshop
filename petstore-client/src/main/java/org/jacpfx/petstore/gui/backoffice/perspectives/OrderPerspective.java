@@ -33,7 +33,7 @@ import java.util.ResourceBundle;
 
 
 @Perspective(id = BaseConfig.ORDER_PERSPECTIVE_ID, name = "contactPerspective",
-        components = {BaseConfig.ORDER_COMPONENT_ID},
+        components = {BaseConfig.ORDER_COMPONENT_ID,BaseConfig.ORDER_DETAIL_COMPONENT_ID,BaseConfig.WSORDER_COMPONENT_ID},
         viewLocation = "/fxml/OrderPerspective.fxml",
         resourceBundleLocation = "bundles.languageBundle")
 public class OrderPerspective implements FXPerspective {

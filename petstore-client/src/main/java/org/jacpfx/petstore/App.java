@@ -1,5 +1,6 @@
 package org.jacpfx.petstore;
 
+import com.aquafx_project.AquaFx;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

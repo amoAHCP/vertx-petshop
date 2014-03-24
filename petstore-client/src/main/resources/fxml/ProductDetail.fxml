@@ -6,7 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.String?>
-<HBox fx:id="rootPane" style="-fx-background-color: #bcbcbc;" xmlns="http://javafx.com/javafx/8"
+<HBox fx:id="rootPane"  xmlns="http://javafx.com/javafx/8"
       xmlns:fx="http://javafx.com/fxml/1">
 
     <children>
@@ -70,6 +70,9 @@
         </VBox>
 
         <VBox fx:id="imagePanel" prefWidth="200" alignment="CENTER_RIGHT" >
+            <padding>
+                <Insets top="10.0"/>
+            </padding>
             <children>
 
             </children>

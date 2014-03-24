@@ -91,7 +91,7 @@ public class ProductComponent implements FXComponent {
             if (dto.getState().equals(ProductListDTO.State.ALL)) {
                 final List<Node> collect = fragmentList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
                 tile.getChildren().clear();
-                tile.getChildren().addAll(collect);
+                collect.forEach(elem->tile.getChildren().add(0,elem));
             } else {
                 addOrReplaceProduct();
             }
@@ -105,7 +105,7 @@ public class ProductComponent implements FXComponent {
         if (indexMap.isEmpty()) {
             // add new products
             final List<Node> collect1 = fragmentSubList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
-            tile.getChildren().addAll(collect1);
+            collect1.forEach(elem->tile.getChildren().add(0,elem));
         } else {
             // replace product
             indexMap.entrySet().forEach(entry -> {

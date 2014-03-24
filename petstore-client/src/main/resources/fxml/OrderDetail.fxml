@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox fx:id="rootPane" prefHeight="800.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1">
+
+    <children>
+
+        <Pane maxHeight="Infinity" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <TitledPane prefHeight="200.0" prefWidth="200.0" text="Customer">
+            <content>
+                <VBox prefWidth="100.0">
+                    <children>
+                        <HBox maxWidth="1.7976931348623157E308">
+                            <children>
+                                <Label text="First:"/>
+                                <Label fx:id="firstName" text=""
+                                       HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets left="10.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <padding>
+                                <Insets top="25.0"/>
+                            </padding>
+                        </HBox>
+                        <HBox maxWidth="1.7976931348623157E308">
+                            <children>
+                                <Label text="Last:"/>
+                                <Label fx:id="lastName" text="">
+                                    <HBox.margin>
+                                        <Insets left="10.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <padding>
+                                <Insets top="10.0"/>
+                            </padding>
+                        </HBox>
+                        <HBox layoutX="20.0" layoutY="46.0" maxWidth="1.7976931348623157E308">
+                            <children>
+                                <Label text="Street:"/>
+                                <Label fx:id="street" text="" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets left="10.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <padding>
+                                <Insets top="10.0"/>
+                            </padding>
+                        </HBox>
+                        <HBox layoutX="20.0" layoutY="72.0" maxWidth="1.7976931348623157E308">
+                            <children>
+                                <Label text="Zip:"/>
+                                <Label fx:id="zip" text="" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets left="10.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <padding>
+                                <Insets top="10.0"/>
+                            </padding>
+                        </HBox>
+                        <HBox layoutX="20.0" layoutY="98.0" maxWidth="1.7976931348623157E308">
+                            <children>
+                                <Label text="City:"/>
+                                <Label fx:id="city" text="" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets left="10.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <padding>
+                                <Insets top="10.0"/>
+                            </padding>
+                        </HBox>
+                        <HBox layoutX="20.0" layoutY="124.0" maxWidth="1.7976931348623157E308">
+                            <children>
+                                <Label text="Country:" >
+                                    <HBox.margin>
+                                        <Insets/>
+                                    </HBox.margin>
+                                </Label>
+                                <Label fx:id="country" text="" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets left="10.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <padding>
+                                <Insets top="10.0"/>
+                            </padding>
+                        </HBox>
+                    </children>
+                </VBox>
+            </content>
+        </TitledPane>
+        <Pane maxHeight="Infinity" maxWidth="Infinity"/>
+        <TitledPane fx:id="productPane" prefWidth="200.0" prefHeight="650" text="Products" VBox.vgrow="ALWAYS" >
+            <content>
+
+            </content>
+        </TitledPane>
+
+    </children>
+
+</VBox>

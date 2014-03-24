@@ -7,44 +7,43 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.fragment.Fragment;
 import org.jacpfx.api.fragment.Scope;
 import org.jacpfx.petstore.gui.backoffice.configuration.BaseConfig;
+import org.jacpfx.petstore.model.Order;
 import org.jacpfx.petstore.model.Product;
 import org.jacpfx.rcp.context.Context;
 
 /**
  * Created by amo on 18.03.14.
  */
-@Fragment(id = BaseConfig.PRODUCT_BOX_FRAGMENT,
-        viewLocation = "/fxml/Product.fxml",
+@Fragment(id = BaseConfig.ORDER_BOX_FRAGMENT,
+        viewLocation = "/fxml/Order.fxml",
         resourceBundleLocation = "bundles.languageBundle",
         localeID = "en_US",
         scope = Scope.PROTOTYPE)
-public class ProductBoxFragment {
+public class OrderBoxFragment {
     @Resource
     private Context context;
 
     @FXML
-    private GridPane rootPane;
+    private VBox rootPane;
     @FXML
     private Label amountLabel;
     @FXML
     private Label priceLabel;
     @FXML
-    private Label nameLabel;
-    @FXML
-    private Label descriptionLabel;
-    @FXML
-    private ImageView productImage;
-    private Product p;
+    private Label customerLabel;
 
-    public void init(Product p) {
-        this.p = p;
+    private Order order;
+
+    public void init(Order order) {
+        this.order = order;
         rootPane.setOnMousePressed((event) -> {
             rootPane.setEffect(new GaussianBlur());
-            context.send(BaseConfig.PRODUCT_DETAIL_COMPONENT_ID, p);
+            context.send(BaseConfig.ORDER_DETAIL_COMPONENT_ID, order);
         });
 
         rootPane.setOnMouseEntered((event) -> {
@@ -57,33 +56,33 @@ public class ProductBoxFragment {
         rootPane.setOnMouseReleased((event) -> {
             rootPane.setEffect(null);
         });
-        priceLabel.setText(Double.toString(p.getPrice()));
-        nameLabel.setText(p.getName());
-        descriptionLabel.setText(p.getDescription());
-        amountLabel.setText(Integer.toString(p.getAmount()));
+        final int sum =order.getBasket().getBasketItems().parallelStream().mapToInt(item->item.getAmount()).sum();
+        amountLabel.setText(Integer.toString(sum));
+        final double price = order.getBasket().getBasketItems().parallelStream().mapToDouble(item->item.getAmount()*item.getProduct().getPrice()).sum();
+        priceLabel.setText(Double.toString(price));
+        customerLabel.setText(order.getCustomer().getFirstname()+", "+order.getCustomer().getLastname());
 
-        if (p.getImageURL() != null && p.getImageURL().length() > 1)
-            productImage.setImage(new Image("/images/products/" + p.getImageURL()));
+
     }
 
-    public Product getProduct() {
-        return p;
+    public Order getOrder() {
+        return order;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (p == o) return true;
+        if (order == o) return true;
         if (!(o instanceof Product)) return false;
 
         Product that = (Product) o;
 
-        if (p != null ? !p.equals(that) : that != null) return false;
+        if (order != null ? !order.equals(that) : that != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return p != null ? p.hashCode() : 0;
+        return order != null ? order.hashCode() : 0;
     }
 }
