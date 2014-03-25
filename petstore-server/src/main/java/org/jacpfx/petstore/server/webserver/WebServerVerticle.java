@@ -35,7 +35,7 @@ public class WebServerVerticle extends Verticle {
             this.handlePath("index.html", request);
         });
 
-        rm.getWithRegEx("/img/.*", (request) -> {
+        rm.getWithRegEx("/img/products/.*", (request) -> {
             System.out.println("Path IMG: " + request.path());
             this.handlePath(GlobalConstants.DUMMY_PICTURE, request);
         });

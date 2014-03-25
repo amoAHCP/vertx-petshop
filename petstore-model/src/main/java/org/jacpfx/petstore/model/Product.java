@@ -1,5 +1,7 @@
 package org.jacpfx.petstore.model;
 
+import org.jacpfx.petstore.commons.ProductUtil;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -10,7 +12,7 @@ public class Product implements Serializable {
 
     private Long id;
     private String name;
-    private String imageURL;
+    private String imageURL = ProductUtil.DEFAULT_IMAGE;
     private String description;
     private int amount;
     private double price;
