@@ -32,6 +32,8 @@ public class BaseConfig {
     public static final String TARGET_ORDER_DETAIL_COMPONENT_ID = "detailComponent";
     public static final String TARGET_ORDER_COMPONENT_ID = "orderComponent";
 
+    public static final String SERVER="jacpfx.org";
+
     public static String getGlobalId(final String perspectiveId, final String componentId) {
         return perspectiveId.concat(".").concat(componentId);
     }
