@@ -41,7 +41,7 @@ public class WSOrderComponent implements CallbackComponent {
     @PostConstruct
     public void onStart() {
         try {
-            connectToAllOrders("localhost", "9090");
+            connectToAllOrders(BaseConfig.SERVER, "9090");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

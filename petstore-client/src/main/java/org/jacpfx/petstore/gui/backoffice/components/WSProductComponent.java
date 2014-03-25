@@ -45,8 +45,8 @@ public class WSProductComponent implements CallbackComponent {
     @PostConstruct
     public void onStart() {
         try {
-            connectToAllProducts("localhost", "8080");
-            connectToUpdateProducts("localhost", "8080");
+            connectToAllProducts(BaseConfig.SERVER, "8080");
+            connectToUpdateProducts(BaseConfig.SERVER, "8080");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

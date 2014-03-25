@@ -139,7 +139,7 @@ public class OrderDetailComponent implements FXComponent {
                ImageView image = new ImageView(new Image("/images/products/" + item.getProduct().getImageURL()));
                image.setFitWidth(20);
                image.setFitHeight(20);
-               Label label = new Label(" "+item.getProduct().getName()+", amount: "+item.getAmount()+", total: "+item.getAmount()*item.getProduct().getPrice());
+               Label label = new Label(" "+item.getProduct().getName()+", "+item.getAmount()+", total: "+item.getAmount()*item.getProduct().getPrice());
                box.getChildren().addAll(image,label);
                setGraphic(box);
             }

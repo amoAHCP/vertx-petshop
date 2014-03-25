@@ -91,7 +91,7 @@ public class ProductComponent implements FXComponent {
             if (dto.getState().equals(ProductListDTO.State.ALL)) {
                 final List<Node> collect = fragmentList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
                 tile.getChildren().clear();
-                collect.forEach(elem->tile.getChildren().add(0,elem));
+                tile.getChildren().addAll(collect);
             } else {
                 addOrReplaceProduct();
             }
@@ -104,17 +104,19 @@ public class ProductComponent implements FXComponent {
         final Map<Integer, ManagedFragmentHandler<ProductBoxFragment>> indexMap = findProductsToReplace();
         if (indexMap.isEmpty()) {
             // add new products
-            final List<Node> collect1 = fragmentSubList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
-            collect1.forEach(elem->tile.getChildren().add(0,elem));
+            final List<Node> collect = fragmentSubList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
+            tile.getChildren().addAll(collect);
+            fragmentList.addAll(fragmentSubList);
         } else {
             // replace product
             indexMap.entrySet().forEach(entry -> {
-                fragmentList.remove(entry.getKey());
-                tile.getChildren().set(entry.getKey(), entry.getValue().getFragmentNode());
+                int key = entry.getKey();
+                fragmentList.set(key, entry.getValue());
+                tile.getChildren().set(key, entry.getValue().getFragmentNode());
             });
         }
 
-        fragmentList.addAll(fragmentSubList);
+
     }
 
     private Map<Integer, ManagedFragmentHandler<ProductBoxFragment>> findProductsToReplace() {
