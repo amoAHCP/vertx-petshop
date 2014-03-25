@@ -61,7 +61,7 @@
         <ImageView fx:id="productImage" fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1"
                    GridPane.rowIndex="0">
             <image>
-                <Image url="@../images/products/box1.png"/>
+                <Image url="@../images/products/default.png"/>
             </image>
         </ImageView>
         <VBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2"

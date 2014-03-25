@@ -24,13 +24,13 @@ public class ProductVerticle extends Verticle {
     public static Integer PORT_NUMER = 8080;
 
     private Set<Product> all = new HashSet<>(
-            Arrays.asList(new Product(1L, "Katze", "box1.png", 200d, 10, "eine Katze"),
-                    new Product(2L, "Hund", "box2.png", 200d, 20, "alter Hund"),
-                    new Product(3L, "Pferd", "box3.png", 2000d, 2, "sehr altes Pferd"),
-                    new Product(4L, "Koala", "dog.png", 1000d, 1, "nicht zum essen"),
-                    new Product(5L, "Tieger", "box1.png", 5000d, 2, "ziemlich gross"),
-                    new Product(6L, "Giraffe", "box2.png", 2000d, 3, "die grossen"),
-                    new Product(7L, "Igel", "box3.png", 100d, 10, "vorsicht stachelig"))
+            Arrays.asList(new Product(1L, "Katze", "cat.png", 200d, 10, "eine Katze"),
+                    new Product(2L, "Affe", "monkey.png", 200d, 20, "alter Hund"),
+                    new Product(3L, "Bär", "bear.png", 2000d, 2, "sehr altes Pferd"),
+                    new Product(4L, "Zebra", "cebra.png", 1000d, 1, "nicht zum essen"),
+                    new Product(5L, "Tiger", "tiger.png", 5000d, 2, "ziemlich gross"),
+                    new Product(6L, "Giraffe", "giraffe.png", 2000d, 3, "die grossen"),
+                    new Product(7L, "Pinguin", "penguine.png", 100d, 10, "Eiskalter Typ!"))
     );
     private Gson parser = new Gson();
 
@@ -72,9 +72,7 @@ public class ProductVerticle extends Verticle {
         try {
             final ProductListDTO dto = MessageUtil.getMessage(message.body(), ProductListDTO.class);
             all = new HashSet<>(dto.getProducts());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -103,12 +101,10 @@ public class ProductVerticle extends Verticle {
             product = MessageUtil.getMessage(message.body(), Product.class);
             if (all.contains(product)) all.remove(product);
             all.add(product);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return parser.toJson(new ProductListDTO(ProductListDTO.State.UPDATE, new HashSet<Product>(Arrays.asList(product))));
+        return parser.toJson(new ProductListDTO(ProductListDTO.State.UPDATE, new HashSet<>(Arrays.asList(product))));
     }
 
 

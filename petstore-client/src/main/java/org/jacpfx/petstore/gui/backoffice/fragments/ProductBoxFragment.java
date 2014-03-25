@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.fragment.Fragment;
 import org.jacpfx.api.fragment.Scope;
+import org.jacpfx.petstore.commons.ProductUtil;
 import org.jacpfx.petstore.gui.backoffice.configuration.BaseConfig;
 import org.jacpfx.petstore.model.Product;
 import org.jacpfx.rcp.context.Context;
@@ -63,7 +64,7 @@ public class ProductBoxFragment {
         amountLabel.setText(Integer.toString(p.getAmount()));
 
         if (p.getImageURL() != null && p.getImageURL().length() > 1)
-            productImage.setImage(new Image("/images/products/" + p.getImageURL()));
+            productImage.setImage(new Image(ProductUtil.getProductImageURL(p.getImageURL())));
     }
 
     public Product getProduct() {
@@ -77,9 +78,8 @@ public class ProductBoxFragment {
 
         Product that = (Product) o;
 
-        if (p != null ? !p.equals(that) : that != null) return false;
+        return !(p != null ? !p.equals(that) : that != null);
 
-        return true;
     }
 
     @Override

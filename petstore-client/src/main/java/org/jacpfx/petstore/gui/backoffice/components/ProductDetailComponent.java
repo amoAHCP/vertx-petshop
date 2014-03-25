@@ -2,6 +2,7 @@ package org.jacpfx.petstore.gui.backoffice.components;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -10,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.component.DeclarativeView;
@@ -17,13 +19,17 @@ import org.jacpfx.api.annotations.lifecycle.PostConstruct;
 import org.jacpfx.api.annotations.lifecycle.PreDestroy;
 import org.jacpfx.api.message.Message;
 import org.jacpfx.api.util.ToolbarPosition;
+import org.jacpfx.petstore.commons.ProductUtil;
 import org.jacpfx.petstore.gui.backoffice.configuration.BaseConfig;
 import org.jacpfx.petstore.model.Product;
 import org.jacpfx.rcp.component.FXComponent;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
+import org.jacpfx.rcp.components.toolBar.JACPHoverMenu;
 import org.jacpfx.rcp.components.toolBar.JACPOptionButton;
 import org.jacpfx.rcp.components.toolBar.JACPToolBar;
 import org.jacpfx.rcp.context.Context;
+import org.jacpfx.rcp.util.CSSUtil;
+import org.springframework.util.StringUtils;
 
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -41,6 +47,8 @@ import java.util.logging.Logger;
 public class ProductDetailComponent implements FXComponent {
 
     private static final Logger LOGGER = Logger.getLogger(ProductDetailComponent.class.getName());
+
+    private static final String DEFAULT_PRODUCT = "default.png";
 
     @Resource
     private Context context;
@@ -92,9 +100,8 @@ public class ProductDetailComponent implements FXComponent {
         price.setText(Double.toString(product.getPrice()));
         amount.setText(Integer.toString(product.getAmount()));
         description.setText(product.getDescription());
-        String imageUrl = product.getImageURL() != null ? product.getImageURL() : "box1.png";
-        imageUrl = imageUrl.isEmpty() ? "box1.png" : imageUrl;
-        imageView.setImage(new Image("/images/products/" + imageUrl));
+        String imageUrl = !StringUtils.isEmpty(product.getImageURL()) ? product.getImageURL() : DEFAULT_PRODUCT;
+        imageView.setImage(new Image(ProductUtil.getProductImageURL(imageUrl)));
     }
 
     @PostConstruct
@@ -167,45 +174,44 @@ public class ProductDetailComponent implements FXComponent {
         imageView.setFitWidth(100);
         final Pane seperator = new Pane();
         VBox.setVgrow(seperator, Priority.ALWAYS);
-        imagePanel.getChildren().addAll(createImageOptionButton(layout), seperator,imageView);
+        imagePanel.getChildren().addAll(createImageOptionButton(layout), seperator, imageView);
     }
 
-    private JACPOptionButton createImageOptionButton(final FXComponentLayout layout) {
-        JACPOptionButton options = new JACPOptionButton("Product Image", layout);
-        Button imageButton1 = new Button("", new ImageView(new Image("/images/products/box1.png")));
-        imageButton1.setOnMousePressed((event) -> {
-            if (current != null) {
-                current.setImageURL("box1.png");
-                imageView.setImage(new Image("/images/products/box1.png"));
-                save.setDisable(false);
-            }
-        });
-        Button imageButton2 = new Button("", new ImageView(new Image("/images/products/box2.png")));
-        imageButton2.setOnMousePressed((event) -> {
-            if (current != null) {
-                current.setImageURL("box2.png");
-                imageView.setImage(new Image("/images/products/box2.png"));
-                save.setDisable(false);
-            }
-        });
-        Button imageButton3 = new Button("", new ImageView(new Image("/images/products/box3.png")));
-        imageButton3.setOnMousePressed((event) -> {
-            if (current != null) {
-                current.setImageURL("box3.png");
-                imageView.setImage(new Image("/images/products/box3.png"));
-                save.setDisable(false);
-            }
-        });
-        Button imageButton4 = new Button("", new ImageView(new Image("/images/products/dog.png")));
-        imageButton4.setOnMousePressed((event) -> {
-            if (current != null) {
-                current.setImageURL("dog.png");
-                imageView.setImage(new Image("/images/products/dog.png"));
-                save.setDisable(false);
-            }
-        });
-        options.addOptions(imageButton1, imageButton2, imageButton3,imageButton4);
+    private ImageView createImageView(final Image image) {
+        ImageView iv = new ImageView(image);
+        CSSUtil.addCSSClass("product-picker", iv);
+        iv.setFitHeight(100);
+        iv.setFitWidth(100);
+        return iv;
+    }
+
+    private JACPHoverMenu createImageOptionButton(final FXComponentLayout layout) {
+        TilePane tile = new TilePane(4, 4);
+        tile.setPadding(new Insets(10));
+        JACPHoverMenu options = new JACPHoverMenu("Product Image", layout);
+
+        String[] images = new String[]{"default", "camel", "cat", "cebra", "elephant", "giraffe", "hippo", "icebear", "lion", "monkey", "penguine", "snake", "tiger", "turtle", "whale"};
+
+        for (String imageName : images) {
+
+            String fileName = ProductUtil.createProductImage(imageName);
+            String imageUrl = ProductUtil.getProductImageURL(fileName);
+            Image img = new Image(imageUrl);
+
+            Button imageButton = new Button("", this.createImageView(img));
+            imageButton.setMaxSize(30, 30);
+            imageButton.setOnMousePressed((event) -> {
+                if (current != null) {
+                    current.setImageURL(fileName);
+                    imageView.setImage(img);
+                    save.setDisable(false);
+                }
+            });
+            tile.getChildren().add(imageButton);
+        }
+
         options.setAlignment(Pos.BOTTOM_LEFT);
+        options.getContentPane().getChildren().add(tile);
         return options;
     }
 

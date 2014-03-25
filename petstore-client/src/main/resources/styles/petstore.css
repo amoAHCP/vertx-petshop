@@ -1,0 +1,6 @@
+.product-picker{
+    -fx-max-width: 100px;
+    -fx-max-height: 100px;
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
+}

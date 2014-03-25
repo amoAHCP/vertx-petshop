@@ -13,7 +13,7 @@ import org.jacpfx.spring.launcher.AFXSpringJavaConfigLauncher;
  * Hello world!
  */
 public class App extends AFXSpringJavaConfigLauncher {
-    public static final String[] STYLE_FILES = {"/styles/style_light.css"};
+    public static final String[] STYLE_FILES = {"/styles/style_light.css", "/styles/petstore.css"};
 
     public App() {
 
@@ -46,5 +46,6 @@ public class App extends AFXSpringJavaConfigLauncher {
     @Override
     protected void postInit(Stage stage) {
         final Scene scene = stage.getScene();
+        scene.getStylesheets().add(STYLE_FILES[1]);
     }
 }
