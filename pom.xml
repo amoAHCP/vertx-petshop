@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <vertex.version>2.0.2-final</vertex.version>
+        <vertx.version>2.1RC1</vertx.version>
     </properties>
     <licenses>
         <license>
@@ -65,12 +65,12 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-core</artifactId>
-            <version>${vertex.version}</version>
+            <version>${vertx.version}</version>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-platform</artifactId>
-            <version>${vertex.version}</version>
+            <version>${vertx.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.validation</groupId>

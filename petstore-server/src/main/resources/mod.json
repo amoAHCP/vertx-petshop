@@ -1,0 +1,7 @@
+{
+
+    "main":"org.jacpfx.petstore.server.product.ProductVerticle",
+    "description":"The petstore module",
+    "licenses": ["The Apache Software License Version 2.0"],
+    "author": "Andy Moncsek"
+}

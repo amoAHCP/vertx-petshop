@@ -38,7 +38,6 @@ public class OrderVerticle extends Verticle {
         registerEventBusMessageHandlerUpdateOrder();
         registerWebsocketHandler(httpServer);
         httpServer.listen(PORT_NUMBER);
-        System.out.println("Order started");
     }
 
     private HttpServer startServer() {

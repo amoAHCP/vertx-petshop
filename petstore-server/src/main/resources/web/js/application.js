@@ -25,8 +25,8 @@ var ItemListController = function ($scope) {
 
     $scope.orderId = "";
 
-    var itemWS = new WebSocket("ws://localhost:8080/all");
-    var orderWS = new WebSocket("ws://localhost:9090/placeOrder");
+    var itemWS = new WebSocket("ws://jacpfx.org:8080/all");
+    var orderWS = new WebSocket("ws://jacpfx.org:9090/placeOrder");
 
     itemWS.onopen = function () {
         console.log("item WS open");
