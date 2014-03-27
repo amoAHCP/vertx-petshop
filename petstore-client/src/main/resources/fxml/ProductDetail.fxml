@@ -1,83 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.collections.FXCollections?>
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.String?>
-<HBox fx:id="rootPane"  xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml/1">
+
+<HBox fx:id="rootPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 
     <children>
-
-        <Pane maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-        <VBox alignment="CENTER_LEFT" maxWidth="Infinity" prefWidth="400.0"  HBox.hgrow="ALWAYS">
+        <VBox alignment="CENTER_LEFT" maxWidth="Infinity" prefHeight="100.0" prefWidth="400.0" HBox.hgrow="ALWAYS">
             <children>
                 <HBox alignment="CENTER_LEFT">
                     <children>
-                        <Label prefWidth="100.0" prefHeight="30" text="Name:"/>
-                        <TextField fx:id="name" alignment="CENTER_RIGHT" prefHeight="30" prefWidth="400" maxWidth="Infinity">
+                        <Label prefHeight="30" prefWidth="180.0" text="Name:" />
+                        <TextField fx:id="name" maxWidth="Infinity" prefHeight="30" prefWidth="400">
                             <padding>
-                                <Insets left="10.0"/>
+                                <Insets left="10.0" />
                             </padding>
                         </TextField>
                     </children>
                 </HBox>
                 <HBox alignment="CENTER_LEFT">
                     <children>
-                        <Label prefWidth="100.0" text="Price"/>
-                        <TextField fx:id="price" alignment="CENTER_RIGHT" prefHeight="30" prefWidth="400" maxWidth="Infinity"
-                                   xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                        <Label prefWidth="180.0" text="Price:" />
+                        <TextField fx:id="price" maxWidth="Infinity" prefHeight="30" prefWidth="400" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
                             <padding>
-                                <Insets left="10.0"/>
+                                <Insets left="10.0" />
                             </padding>
                         </TextField>
                     </children>
                     <padding>
-                        <Insets top="10.0"/>
+                        <Insets top="10.0" />
                     </padding>
                 </HBox>
                 <HBox alignment="CENTER_LEFT">
                     <children>
-                        <Label prefWidth="100.0" text="Amount"/>
-                        <TextField fx:id="amount" alignment="CENTER_RIGHT" prefHeight="30" prefWidth="400" maxWidth="Infinity"
-                                   xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                        <Label prefWidth="180.0" text="Amount:" />
+                        <TextField fx:id="amount" maxWidth="Infinity" prefHeight="30" prefWidth="400" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
                             <padding>
-                                <Insets left="10.0"/>
+                                <Insets left="10.0" />
                             </padding>
                         </TextField>
                     </children>
                     <padding>
-                        <Insets top="10.0"/>
+                        <Insets top="10.0" />
                     </padding>
                 </HBox>
                 <HBox alignment="CENTER_LEFT">
                     <children>
-                        <Label prefWidth="100.0" text="Description:"/>
-                        <TextField fx:id="description" alignment="CENTER_RIGHT" prefHeight="30" prefWidth="400" maxWidth="Infinity"
-                                   xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                        <Label prefWidth="180.0" text="Description:" />
+                        <TextField fx:id="description" maxWidth="Infinity" prefHeight="30" prefWidth="400" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
                             <padding>
-                                <Insets left="10.0"/>
+                                <Insets left="10.0" />
                             </padding>
                         </TextField>
                     </children>
                     <padding>
-                        <Insets top="10.0"/>
+                        <Insets top="10.0" />
                     </padding>
                 </HBox>
             </children>
+<HBox.margin>
+<Insets />
+</HBox.margin>
+<padding>
+<Insets left="20.0" />
+</padding>
         </VBox>
 
-        <VBox fx:id="imagePanel" prefWidth="200" alignment="CENTER_RIGHT" >
+        <VBox fx:id="imagePanel" alignment="CENTER_RIGHT" prefWidth="200">
             <padding>
-                <Insets top="10.0"/>
+                <Insets top="10.0" />
             </padding>
-            <children>
-
-            </children>
+<children><BorderPane fx:id="imageViewPanel" prefHeight="120.0" prefWidth="200.0" /><BorderPane fx:id="buttonPanel" prefHeight="40.0" prefWidth="200.0">
+<VBox.margin>
+<Insets bottom="16.0" />
+</VBox.margin></BorderPane>
+</children>
+<HBox.margin>
+<Insets left="30.0" />
+</HBox.margin>
         </VBox>
-        <Pane maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
     </children>
 
 </HBox>

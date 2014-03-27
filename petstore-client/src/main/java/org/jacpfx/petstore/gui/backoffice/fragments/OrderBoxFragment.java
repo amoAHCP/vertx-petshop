@@ -36,6 +36,10 @@ public class OrderBoxFragment {
     private Label priceLabel;
     @FXML
     private Label customerLabel;
+    @FXML
+    private Label itemLabel;
+    @FXML
+    private Label orderId;
 
     private Order order;
 
@@ -57,10 +61,12 @@ public class OrderBoxFragment {
             rootPane.setEffect(null);
         });
         final int sum =order.getBasket().getBasketItems().parallelStream().mapToInt(item->item.getAmount()).sum();
-        amountLabel.setText(Integer.toString(sum));
+        this.amountLabel.setText(Integer.toString(sum));
         final double price = order.getBasket().getBasketItems().parallelStream().mapToDouble(item->item.getAmount()*item.getProduct().getPrice()).sum();
-        priceLabel.setText(Double.toString(price));
-        customerLabel.setText(order.getCustomer().getFirstname()+", "+order.getCustomer().getLastname());
+        this.priceLabel.setText(Double.toString(price));
+        this.customerLabel.setText(order.getCustomer().getFirstname()+", "+order.getCustomer().getLastname());
+        this.itemLabel.setText(Integer.toString(order.getBasket().getBasketItems().size()));
+        this.orderId.setText(order.getOrderId());
 
 
     }

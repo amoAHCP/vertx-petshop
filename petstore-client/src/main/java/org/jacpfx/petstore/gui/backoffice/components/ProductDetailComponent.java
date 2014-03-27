@@ -9,10 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.component.DeclarativeView;
 import org.jacpfx.api.annotations.lifecycle.PostConstruct;
@@ -62,7 +59,9 @@ public class ProductDetailComponent implements FXComponent {
     @FXML
     private TextField description;
     @FXML
-    private VBox imagePanel;
+    private BorderPane imageViewPanel;
+    @FXML
+    private BorderPane buttonPanel;
 
     private Button save = new Button("save");
     private Button create = new Button("create");
@@ -174,7 +173,8 @@ public class ProductDetailComponent implements FXComponent {
         imageView.setFitWidth(100);
         final Pane seperator = new Pane();
         VBox.setVgrow(seperator, Priority.ALWAYS);
-        imagePanel.getChildren().addAll(createImageOptionButton(layout), seperator, imageView);
+        this.imageViewPanel.setCenter(imageView);
+        this.buttonPanel.setCenter(createImageOptionButton(layout));
     }
 
     private ImageView createImageView(final Image image) {

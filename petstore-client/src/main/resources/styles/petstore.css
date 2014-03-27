@@ -4,3 +4,12 @@
     -fx-fit-to-width: true;
     -fx-fit-to-height: true;
 }
+
+.bo-product-label{
+    -fx-pref-width: 90;
+}
+
+.bo-product-button{
+
+
+}

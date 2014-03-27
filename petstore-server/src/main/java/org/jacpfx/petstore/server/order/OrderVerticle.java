@@ -51,12 +51,13 @@ public class OrderVerticle extends Verticle {
     private void handleWSPlaceOrderMessagesFromBus(final Message<byte[]> message) {
         try {
             final OrderProcessingDTO orderProcessing = MessageUtil.getMessage(message.body(), OrderProcessingDTO.class);
+
             this.addOrderAndBroadCast(orderProcessing.getOrder());
             final Optional<ServerWebSocket> result = shopRepository.getWebSockets().
                     parallelStream().
                     filter(socket -> socket.textHandlerID().equals(orderProcessing.getWsTextFrameID())
                     ).findFirst();
-            if (result.isPresent()) result.get().writeTextFrame(String.format("2014-%04d", (ORDER_NUMBER++)));
+            if (result.isPresent()) result.get().writeTextFrame(orderProcessing.getOrder().getOrderId());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -127,6 +128,7 @@ public class OrderVerticle extends Verticle {
                     serverSocket.dataHandler(data -> {
                         final String json = data.getString(0, data.length());
                         final Order order = parser.fromJson(json, Order.class);
+                        order.setOrderId(String.format("2014-%04d", (ORDER_NUMBER++)));
                         System.out.println("JSON: " + json + "  ID: " + serverSocket.textHandlerID());
                         try {
                             vertx.eventBus().publish("org.jacpfx.petstore.placeOrder", Serializer.serialize(new OrderProcessingDTO(order, serverSocket.textHandlerID())));

@@ -10,6 +10,7 @@ import java.util.UUID;
 // TODO add id and update hashCode
 public class Order implements Serializable {
     private Basket basket;
+    private String orderId;
     private Long id;
     private Customer customer;
     private double amount;
@@ -44,6 +45,14 @@ public class Order implements Serializable {
 
     public Basket getBasket() {
         return basket;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     @Override
