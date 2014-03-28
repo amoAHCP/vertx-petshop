@@ -25,8 +25,8 @@ public class ProductVerticle extends Verticle {
 
     private Set<Product> all = new HashSet<>(
             Arrays.asList(new Product(1L, "Katze", "cat.png", 200d, 10, "eine Katze"),
-                    new Product(2L, "Affe", "monkey.png", 200d, 20, "alter Hund"),
-                    new Product(3L, "Bär", "bear.png", 2000d, 2, "sehr altes Pferd"),
+                    new Product(2L, "Affe", "monkey.png", 200d, 20, "immer mit Banane"),
+                    new Product(3L, "Bär", "bear.png", 2000d, 2, "Teddy the Bär"),
                     new Product(4L, "Zebra", "cebra.png", 1000d, 1, "nicht zum essen"),
                     new Product(5L, "Tiger", "tiger.png", 5000d, 2, "ziemlich gross"),
                     new Product(6L, "Giraffe", "giraffe.png", 2000d, 3, "die grossen"),

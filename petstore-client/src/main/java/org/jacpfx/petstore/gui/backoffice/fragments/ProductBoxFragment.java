@@ -73,12 +73,6 @@ public class ProductBoxFragment {
         }
     }
 
-    public void setFlippingPanel(final FlippingPanel flip) {
-        rootPane.setOnScrollStarted((event) -> {
-            flip.flip();
-            event.consume();
-        });
-    }
 
     public Product getProduct() {
         return p;

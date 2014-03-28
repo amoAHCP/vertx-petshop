@@ -12,8 +12,16 @@
     -fx-background-radius: 2, 1;
     -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 2, 0.0, 1, 1);
 }
-.button:hover,
-.jacp-tool-bar .button:hover,
+
+.jacp-tool-bar {
+    -fx-background-color: linear-gradient(#f3f3f3 0%, #ebebeb 100%), linear-gradient(#e1e1e1 0%, #c3c3c3 100%);
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 2, 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 2, 0.0, 1, 1);
+}
+.button:hover {
+
+}
 .button-dark-grey:hover {
     -fx-background-color: linear-gradient(#f3f3f3 0%, #ebebeb 100%), linear-gradient(#e1e1e1 0%, #c3c3c3 100%);
     -fx-background-insets: 0, 1;

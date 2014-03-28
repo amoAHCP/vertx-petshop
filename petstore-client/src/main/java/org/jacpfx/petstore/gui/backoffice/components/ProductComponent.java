@@ -117,8 +117,10 @@ public class ProductComponent implements FXComponent {
             // replace product
             indexMap.entrySet().forEach(entry -> {
                 int key = entry.getKey();
-                fragmentList.set(key, entry.getValue());
-                tile.getChildren().set(key, entry.getValue().getFlip());
+                final ProductFragmentContainer value = entry.getValue();
+                createFlippingPanel(value);
+                fragmentList.set(key, value);
+                tile.getChildren().set(key, value.getFlip());
             });
         }
 
@@ -180,24 +182,6 @@ public class ProductComponent implements FXComponent {
         this.mainPane.setCenter(scrollPane);
         return this.mainPane;
     }
-//
-//    private FlippingPanel createTESTFlippingPanel(ProductFragmentContainer container) {
-//
-//        Button a = new Button("AAAAA");
-//        Region aa = wrap(a);
-//        Button b = new Button("BBBBB");
-//        Region bb = wrap(b);
-//        bb.setVisible(false);
-//        FlippingPanel flipper = new FlippingPanel(aa, bb);
-//        a.setOnAction((listener) -> {
-//            flipper.flip();
-//        });
-//        b.setOnAction((listener) -> {
-//            flipper.flip();
-//        });
-////        container.setFlippingPanel(flipper);
-//        return flipper;
-//    }
 
     private Region wrap(Node node) {
         return new Pane(node);
@@ -206,6 +190,10 @@ public class ProductComponent implements FXComponent {
     private FlippingPanel createFlippingPanel(ProductFragmentContainer container) {
         FlippingPanel flipper = new FlippingPanel(this.wrap(container.getProductBoxFragment().getFragmentNode()), this.wrap(container.getProductInformationBoxFragment().getFragmentNode()));
         container.setFlippingPanel(flipper);
+        flipper.setOnScrollStarted((event) -> {
+            flipper.flip();
+            event.consume();
+        });
         return flipper;
     }
 
