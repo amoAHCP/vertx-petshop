@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -179,17 +180,35 @@ public class ProductComponent implements FXComponent {
         this.mainPane.setCenter(scrollPane);
         return this.mainPane;
     }
+//
+//    private FlippingPanel createTESTFlippingPanel(ProductFragmentContainer container) {
+//
+//        Button a = new Button("AAAAA");
+//        Region aa = wrap(a);
+//        Button b = new Button("BBBBB");
+//        Region bb = wrap(b);
+//        bb.setVisible(false);
+//        FlippingPanel flipper = new FlippingPanel(aa, bb);
+//        a.setOnAction((listener) -> {
+//            flipper.flip();
+//        });
+//        b.setOnAction((listener) -> {
+//            flipper.flip();
+//        });
+////        container.setFlippingPanel(flipper);
+//        return flipper;
+//    }
 
+    private Region wrap(Node node) {
+        return new Pane(node);
+
+    }
     private FlippingPanel createFlippingPanel(ProductFragmentContainer container) {
         FlippingPanel flipper = new FlippingPanel(this.wrap(container.getProductBoxFragment().getFragmentNode()), this.wrap(container.getProductInformationBoxFragment().getFragmentNode()));
         container.setFlippingPanel(flipper);
         return flipper;
     }
 
-    private Region wrap(Node node) {
-        return new Pane(node);
-
-    }
 
     private ProductFragmentContainer createFragmentContainer(final Product p) {
         return new ProductFragmentContainer(this.createProductFragment(p), this.createProductInfoFragment(p));

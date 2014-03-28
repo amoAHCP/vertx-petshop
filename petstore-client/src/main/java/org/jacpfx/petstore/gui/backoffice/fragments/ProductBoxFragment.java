@@ -8,6 +8,7 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.fragment.Fragment;
 import org.jacpfx.api.fragment.Scope;
@@ -40,8 +41,6 @@ public class ProductBoxFragment {
     @FXML
     private Label descriptionLabel;
     @FXML
-    private Button detailButton;
-    @FXML
     private ImageView productImage;
     private Product p;
 
@@ -62,6 +61,8 @@ public class ProductBoxFragment {
         rootPane.setOnMouseReleased((event) -> {
             rootPane.setEffect(null);
         });
+
+
         priceLabel.setText(Double.toString(p.getPrice()));
         nameLabel.setText(p.getName());
         descriptionLabel.setText(p.getDescription());
@@ -73,8 +74,9 @@ public class ProductBoxFragment {
     }
 
     public void setFlippingPanel(final FlippingPanel flip) {
-        this.detailButton.setOnAction((listener) -> {
+        rootPane.setOnScrollStarted((event) -> {
             flip.flip();
+            event.consume();
         });
     }
 

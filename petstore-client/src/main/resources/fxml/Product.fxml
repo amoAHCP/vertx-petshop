@@ -24,10 +24,7 @@
             <image>
                 <Image url="@../images/products/default.png" />
             </image>
-        </ImageView><Button fx:id="detailButton" mnemonicParsing="false" styleClass="bo-product-button" text="Details">
-<HBox.margin>
-<Insets left="24.0" top="12.0" />
-</HBox.margin></Button>
+        </ImageView>
 </children></HBox><VBox prefHeight="123.0" prefWidth="200.0" GridPane.columnIndex="1">
 <children>
                 <HBox prefHeight="50.0" prefWidth="200.0">

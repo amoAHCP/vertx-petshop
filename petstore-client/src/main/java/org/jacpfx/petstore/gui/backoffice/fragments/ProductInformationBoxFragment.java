@@ -39,8 +39,6 @@ public class ProductInformationBoxFragment {
     private Label nameLabel;
     @FXML
     private Label descriptionLabel;
-    @FXML
-    private Button backButton;
 
     private Product p;
 
@@ -71,8 +69,9 @@ public class ProductInformationBoxFragment {
     }
 
     public void setFlippingPanel(final FlippingPanel flip) {
-        this.backButton.setOnAction((listener) -> {
+        rootPane.setOnScrollStarted((event) -> {
             flip.flip();
+            event.consume();
         });
     }
 
