@@ -118,9 +118,9 @@ public class ProductComponent implements FXComponent {
             indexMap.entrySet().forEach(entry -> {
                 int key = entry.getKey();
                 final ProductFragmentContainer value = entry.getValue();
-                createFlippingPanel(value);
+                final FlippingPanel flippingPanel = createFlippingPanel(value);
                 fragmentList.set(key, value);
-                tile.getChildren().set(key, value.getFlip());
+                tile.getChildren().set(key, flippingPanel);
             });
         }
 
