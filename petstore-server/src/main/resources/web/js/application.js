@@ -25,8 +25,8 @@ var ItemListController = function ($scope) {
 
     $scope.orderId = "";
 
-    var itemWS = new WebSocket("ws://jacpfx.org:8080/all");
-    var orderWS = new WebSocket("ws://jacpfx.org:9090/placeOrder");
+    var itemWS = new WebSocket("ws://localhost:8080/all");
+    var orderWS = new WebSocket("ws://localhost:9090/placeOrder");
 
     itemWS.onopen = function () {
         console.log("item WS open");
@@ -50,14 +50,20 @@ var ItemListController = function ($scope) {
             var container = JSON.parse(msg.data);
             if (container.state == "UPDATE") {
                 container.products.forEach(function (element) {
+                    var replaced = false;
                     $scope.pets.forEach(function (pet) {
                         if (pet.id == element.id) {
+                            var idx = $scope.pets.indexOf(pet);
                             // altes Element löschen
-                            $scope.pets.splice($scope.pets.indexOf(pet), 1);
+                            $scope.pets.splice(idx, 1);
+                            $scope.pets.splice(idx, 0, element);
+                            replaced = true;
                         }
                     });
-                    // neues Element hinzufügen
-                    $scope.pets.push(element);
+                    if (!replaced) {
+                        // neues Element hinzufügen
+                        $scope.pets.push(element);
+                    }
                 });
             } else {
                 $scope.pets = container.products;
