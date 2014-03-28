@@ -69,7 +69,7 @@ public class ProductComponent implements FXComponent {
         if (message.isMessageBodyTypeOf(ProductListDTO.class)) {
             ProductListDTO dto = message.getTypedMessageBody(ProductListDTO.class);
 
-            final List<ProductFragmentContainer> collect = dto.getProducts().parallelStream().map(p -> this.createFragmentContainer(p)).collect(Collectors.toList());
+            final List<ProductFragmentContainer> collect = dto.getProducts().parallelStream().map(this::createFragmentContainer).collect(Collectors.toList());
             if (dto.getState().equals(ProductListDTO.State.ALL)) {
                 fragmentList.clear();
                 fragmentList.addAll(collect);

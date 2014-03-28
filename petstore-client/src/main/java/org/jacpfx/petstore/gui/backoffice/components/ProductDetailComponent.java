@@ -206,6 +206,7 @@ public class ProductDetailComponent implements FXComponent {
                     imageView.setImage(img);
                     save.setDisable(false);
                 }
+                options.hide();
             });
             tile.getChildren().add(imageButton);
         }
