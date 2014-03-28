@@ -29,8 +29,6 @@ public class ProductFragmentContainer {
 
     public void setFlippingPanel(final FlippingPanel flip) {
         this.flip = flip;
-        productBoxFragment.getController().setFlippingPanel(flip);
-        productInformationBoxFragment.getController().setFlippingPanel(flip);
     }
 
     public FlippingPanel getFlip() {
