@@ -26,6 +26,7 @@ public class BaseConfig {
     // ***** FRAGMENTS *****
     public static final String PRODUCT_BOX_FRAGMENT = "d01";
     public static final String ORDER_BOX_FRAGMENT = "d02";
+    public static final String PRODUCT_INFORMATION_BOX_FRAGMENT = "d03";
     // ***** TARGETS *****
     public static final String TARGET_CUSTOMER_COMPONENT_ID = "customerComponent";
     public static final String TARGET_PRODUCT_COMPONENT_ID = "productComponent";

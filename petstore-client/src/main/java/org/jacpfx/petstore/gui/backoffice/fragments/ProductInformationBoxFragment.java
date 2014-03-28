@@ -20,12 +20,12 @@ import org.jacpfx.rcp.context.Context;
 /**
  * Created by amo on 18.03.14.
  */
-@Fragment(id = BaseConfig.PRODUCT_BOX_FRAGMENT,
-        viewLocation = "/fxml/Product.fxml",
+@Fragment(id = BaseConfig.PRODUCT_INFORMATION_BOX_FRAGMENT,
+        viewLocation = "/fxml/ProductInformation.fxml",
         resourceBundleLocation = "bundles.languageBundle",
         localeID = "en_US",
         scope = Scope.PROTOTYPE)
-public class ProductBoxFragment {
+public class ProductInformationBoxFragment {
     @Resource
     private Context context;
 
@@ -40,10 +40,10 @@ public class ProductBoxFragment {
     @FXML
     private Label descriptionLabel;
     @FXML
-    private Button detailButton;
-    @FXML
-    private ImageView productImage;
+    private Button backButton;
+
     private Product p;
+
 
     public void init(Product p) {
         this.p = p;
@@ -67,16 +67,15 @@ public class ProductBoxFragment {
         descriptionLabel.setText(p.getDescription());
         amountLabel.setText(Integer.toString(p.getAmount()));
 
-        if (p.getImageURL() != null && p.getImageURL().length() > 1) {
-            productImage.setImage(new Image(ProductUtil.getProductImageURL(p.getImageURL())));
-        }
+
     }
 
     public void setFlippingPanel(final FlippingPanel flip) {
-        this.detailButton.setOnAction((listener) -> {
+        this.backButton.setOnAction((listener) -> {
             flip.flip();
         });
     }
+
 
     public Product getProduct() {
         return p;

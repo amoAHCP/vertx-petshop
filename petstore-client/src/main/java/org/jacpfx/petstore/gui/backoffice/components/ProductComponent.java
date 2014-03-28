@@ -9,15 +9,20 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import org.jacpfx.api.annotations.Resource;
 import org.jacpfx.api.annotations.component.View;
 import org.jacpfx.api.annotations.lifecycle.PostConstruct;
 import org.jacpfx.api.annotations.lifecycle.PreDestroy;
 import org.jacpfx.api.message.Message;
+import org.jacpfx.controls.flip.FlippingPanel;
 import org.jacpfx.petstore.dto.ProductListDTO;
 import org.jacpfx.petstore.gui.backoffice.configuration.BaseConfig;
 import org.jacpfx.petstore.gui.backoffice.fragments.ProductBoxFragment;
+import org.jacpfx.petstore.gui.backoffice.fragments.ProductFragmentContainer;
+import org.jacpfx.petstore.gui.backoffice.fragments.ProductInformationBoxFragment;
 import org.jacpfx.petstore.model.Product;
 import org.jacpfx.rcp.component.FXComponent;
 import org.jacpfx.rcp.componentLayout.FXComponentLayout;
@@ -51,8 +56,8 @@ public class ProductComponent implements FXComponent {
     TilePane tile = new TilePane(Orientation.HORIZONTAL);
 
     private ObservableList<Node> products = FXCollections.emptyObservableList();
-    private List<ManagedFragmentHandler<ProductBoxFragment>> fragmentList = new CopyOnWriteArrayList<>();
-    private List<ManagedFragmentHandler<ProductBoxFragment>> fragmentSubList = new CopyOnWriteArrayList<>();
+    private List<ProductFragmentContainer> fragmentList = new CopyOnWriteArrayList<>();
+    private List<ProductFragmentContainer> fragmentSubList = new CopyOnWriteArrayList<>();
 
     @Override
     /**
@@ -64,7 +69,7 @@ public class ProductComponent implements FXComponent {
         if (message.isMessageBodyTypeOf(ProductListDTO.class)) {
             ProductListDTO dto = message.getTypedMessageBody(ProductListDTO.class);
 
-            final List<ManagedFragmentHandler<ProductBoxFragment>> collect = dto.getProducts().parallelStream().map(p -> createOrderFragment(p)).collect(Collectors.toList());
+            final List<ProductFragmentContainer> collect = dto.getProducts().parallelStream().map(p -> this.createFragmentContainer(p)).collect(Collectors.toList());
             if (dto.getState().equals(ProductListDTO.State.ALL)) {
                 fragmentList.clear();
                 fragmentList.addAll(collect);
@@ -89,7 +94,7 @@ public class ProductComponent implements FXComponent {
         if (message.isMessageBodyTypeOf(ProductListDTO.class)) {
             ProductListDTO dto = message.getTypedMessageBody(ProductListDTO.class);
             if (dto.getState().equals(ProductListDTO.State.ALL)) {
-                final List<Node> collect = fragmentList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
+                final List<Node> collect = fragmentList.parallelStream().map(this::createFlippingPanel).collect(Collectors.toList());
                 tile.getChildren().clear();
                 tile.getChildren().addAll(collect);
             } else {
@@ -101,10 +106,10 @@ public class ProductComponent implements FXComponent {
     }
 
     private void addOrReplaceProduct() {
-        final Map<Integer, ManagedFragmentHandler<ProductBoxFragment>> indexMap = findProductsToReplace();
+        final Map<Integer, ProductFragmentContainer> indexMap = findProductsToReplace();
         if (indexMap.isEmpty()) {
             // add new products
-            final List<Node> collect = fragmentSubList.parallelStream().map(fragment -> fragment.getFragmentNode()).collect(Collectors.toList());
+            final List<Node> collect = fragmentSubList.parallelStream().map(this::createFlippingPanel).collect(Collectors.toList());
             tile.getChildren().addAll(collect);
             fragmentList.addAll(fragmentSubList);
         } else {
@@ -112,17 +117,18 @@ public class ProductComponent implements FXComponent {
             indexMap.entrySet().forEach(entry -> {
                 int key = entry.getKey();
                 fragmentList.set(key, entry.getValue());
-                tile.getChildren().set(key, entry.getValue().getFragmentNode());
+                tile.getChildren().set(key, entry.getValue().getFlip());
             });
         }
 
 
     }
 
-    private Map<Integer, ManagedFragmentHandler<ProductBoxFragment>> findProductsToReplace() {
-        final Map<Integer, ManagedFragmentHandler<ProductBoxFragment>> indexMap = new HashMap<>();
+    private Map<Integer, ProductFragmentContainer> findProductsToReplace() {
+        final Map<Integer, ProductFragmentContainer> indexMap = new HashMap<>();
         fragmentSubList.forEach(p -> {
-            final Optional<ManagedFragmentHandler<ProductBoxFragment>> first = fragmentList.parallelStream().filter(fragment -> fragment.getController().equals(p.getController().getProduct())).findFirst();
+            final Optional<ProductFragmentContainer> first = fragmentList.parallelStream().filter(container -> container.getProductBoxFragment().getController().equals(
+                    p.getProductBoxFragment().getController().getProduct())).findFirst();
             if (first.isPresent()) {
                 int index = fragmentList.indexOf(first.get());
                 indexMap.put(index, p);
@@ -174,8 +180,29 @@ public class ProductComponent implements FXComponent {
         return this.mainPane;
     }
 
-    private ManagedFragmentHandler<ProductBoxFragment> createOrderFragment(Product p) {
+    private FlippingPanel createFlippingPanel(ProductFragmentContainer container) {
+        FlippingPanel flipper = new FlippingPanel(this.wrap(container.getProductBoxFragment().getFragmentNode()), this.wrap(container.getProductInformationBoxFragment().getFragmentNode()));
+        container.setFlippingPanel(flipper);
+        return flipper;
+    }
+
+    private Region wrap(Node node) {
+        return new Pane(node);
+
+    }
+
+    private ProductFragmentContainer createFragmentContainer(final Product p) {
+        return new ProductFragmentContainer(this.createProductFragment(p), this.createProductInfoFragment(p));
+    }
+
+    private ManagedFragmentHandler<ProductBoxFragment> createProductFragment(Product p) {
         ManagedFragmentHandler<ProductBoxFragment> fragment = context.getManagedFragmentHandler(ProductBoxFragment.class);
+        fragment.getController().init(p);
+        return fragment;
+    }
+
+    private ManagedFragmentHandler<ProductInformationBoxFragment> createProductInfoFragment(Product p) {
+        ManagedFragmentHandler<ProductInformationBoxFragment> fragment = context.getManagedFragmentHandler(ProductInformationBoxFragment.class);
         fragment.getController().init(p);
         return fragment;
     }

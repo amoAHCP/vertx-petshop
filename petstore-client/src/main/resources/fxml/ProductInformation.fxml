@@ -4,7 +4,6 @@
 <?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <GridPane fx:id="rootPane" prefHeight="200.0" prefWidth="200.0" styleClass="product" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
@@ -18,15 +17,10 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children><VBox prefHeight="200.0" prefWidth="100.0">
-<children><HBox prefHeight="100.0" prefWidth="200.0">
-<children>
-        <ImageView fx:id="productImage" fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../images/products/default.png" />
-            </image>
-        </ImageView><Button fx:id="detailButton" mnemonicParsing="false" styleClass="bo-product-button" text="Details">
+<children><HBox prefHeight="48.0" prefWidth="200.0">
+<children><Button fx:id="backButton" mnemonicParsing="false" styleClass="bo-product-button" text="Back">
 <HBox.margin>
-<Insets left="24.0" top="12.0" />
+<Insets left="13.0" top="12.0" />
 </HBox.margin></Button>
 </children></HBox><VBox prefHeight="123.0" prefWidth="200.0" GridPane.columnIndex="1">
 <children>
